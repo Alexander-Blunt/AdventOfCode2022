@@ -1,4 +1,4 @@
-﻿namespace CodeToTest
+﻿namespace Day1_CalorieCounting
 {
     internal class Program
     {
