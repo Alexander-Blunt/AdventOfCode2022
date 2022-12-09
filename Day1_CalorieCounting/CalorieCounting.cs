@@ -1,4 +1,6 @@
-﻿namespace Day1_CalorieCounting
+﻿using System.Globalization;
+
+namespace Day1_CalorieCounting
 {
     internal class CalorieCounting
     {
