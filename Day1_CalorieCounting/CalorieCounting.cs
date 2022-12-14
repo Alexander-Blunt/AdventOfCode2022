@@ -55,19 +55,19 @@ public class CalorieCounting
 
     public static List<int> GetCaloriesForEachElf(string fileLocation)
     {
-        List<int> outputList = new();
-        outputList.Add(0);
-        int index = 0;
+        List<int> caloriesForEachElf = new() { 0 };
+        int elfNumber = 0;
         foreach (string line in File.ReadLines(fileLocation))
         {
-            if (!String.IsNullOrEmpty(line)) outputList[index] += Int32.Parse(line);
+            // If a line is not empty, add its value to the total for that elf.
+            if (!String.IsNullOrEmpty(line)) caloriesForEachElf[elfNumber] += Int32.Parse(line);
+            // Otherwise add a new elf to the list.
             else
             {
-                outputList.Add(0);
-                index++;
+                caloriesForEachElf.Add(0);
+                elfNumber++;
             }
         }
-        return outputList;
-
+        return caloriesForEachElf;
     }
 }
