@@ -17,6 +17,7 @@ public class CalorieCounting
         List<int> totalCaloriesForEachElf = GetCaloriesForEachElf(fileLocation);
 
         int highest = totalCaloriesForEachElf[0];
+        // Used a for loop to avoid comparing the first item to itself.
         for (int i = 1; i < totalCaloriesForEachElf.Count; i++)
         {
             if (highest < totalCaloriesForEachElf[i]) highest = totalCaloriesForEachElf[i];
@@ -28,7 +29,9 @@ public class CalorieCounting
     {
         List<int> totalCaloriesForEachElf = GetCaloriesForEachElf(fileLocation);
 
+        // From highest to lowest.
         int[] highestThree = { totalCaloriesForEachElf[0], 0, 0 };
+        // Used a for loop to avoid comparing the first item to itself.
         for (int i = 1; i < totalCaloriesForEachElf.Count; i++)
         {
             if (highestThree[0] < totalCaloriesForEachElf[i])
