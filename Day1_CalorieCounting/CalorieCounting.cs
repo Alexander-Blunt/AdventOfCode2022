@@ -8,13 +8,11 @@ public class CalorieCounting
     static void Main(string[] args)
     {
         string fileLocation = "..\\..\\..\\Day1Input.txt";
-        Console.WriteLine(FindHighestCalories(fileLocation));
+        Console.WriteLine(FindHighestCalorieTotal(fileLocation));
+        Console.WriteLine(FindTotalOfHighetThree(fileLocation));
     }
 
-    // Create file stream.
-    // Read file one line at a time, adding to an array representing the total of each elf.
-    // Find highest total and return it.
-    public static int FindHighestCalories(string fileLocation)
+    public static int FindHighestCalorieTotal(string fileLocation)
     {
         List<int> totalCaloriesForEachElf = GetCaloriesForEachElf(fileLocation);
 
@@ -24,6 +22,32 @@ public class CalorieCounting
             if (highest < totalCaloriesForEachElf[i]) highest = totalCaloriesForEachElf[i];
         }
         return highest;
+    }
+
+    public static int FindTotalOfHighetThree(string fileLocation)
+    {
+        List<int> totalCaloriesForEachElf = GetCaloriesForEachElf(fileLocation);
+
+        int[] highestThree = { totalCaloriesForEachElf[0], 0, 0 };
+        for (int i = 1; i < totalCaloriesForEachElf.Count; i++)
+        {
+            if (highestThree[0] < totalCaloriesForEachElf[i])
+            {
+                highestThree[2] = highestThree[1];
+                highestThree[1] = highestThree[0];
+                highestThree[0] = totalCaloriesForEachElf[i];
+            }
+            else if (highestThree[1] < totalCaloriesForEachElf[i])
+            {
+                highestThree[2] = highestThree[1];
+                highestThree[1] = totalCaloriesForEachElf[i];
+            }
+            else if (highestThree[2] < totalCaloriesForEachElf[i])
+            {
+                highestThree[2] = totalCaloriesForEachElf[i];
+            }
+        }
+        return highestThree.Sum();
     }
 
     public static List<int> GetCaloriesForEachElf(string fileLocation)
