@@ -14,10 +14,12 @@ internal class Program
 public class Rucksack
 {
     private int CompartmentSize;
-    private string Compartment1;
-    private string Compartment2;
+    public string Compartment1
+    { get; }
+    public string Compartment2
+    { get; }
 
-    public Rucksack(string contents)
+    Rucksack(string contents)
     {
         CompartmentSize = contents.Length / 2;
         Compartment1 = contents.Substring(0, CompartmentSize);
