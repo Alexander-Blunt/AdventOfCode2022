@@ -13,11 +13,9 @@ internal class Program
 
 public class Rucksack
 {
-    private int CompartmentSize;
-    public string Compartment1
-    { get; }
-    public string Compartment2
-    { get; }
+    public int CompartmentSize { get; }
+    public string Compartment1 { get; }
+    public string Compartment2 { get; }
 
     Rucksack(string contents)
     {
