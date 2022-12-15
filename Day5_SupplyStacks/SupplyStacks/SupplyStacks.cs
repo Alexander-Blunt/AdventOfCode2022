@@ -36,7 +36,7 @@ namespace Day5SupplyStacks
         // Setup the stacks
         public static List<Stack<char>> ConvertDiagramToStacks(List<string> diagram)
         {
-            // Get Number of stacks, Equal to number of characters in last line once spaces are removed.
+            // Get Number of stacks, Equal to number of columns in last line once spaces are removed.
             string lastLineOfDiagram = diagram.Last();
             int numOfStacks = lastLineOfDiagram.Length / 4 + 1;
             List<Stack<char>> stacks = new();
@@ -57,11 +57,10 @@ namespace Day5SupplyStacks
                 }
             }
             return stacks;
-
         }
-        // Read each line
-        // Convert diagram to an array of stacks
-        // Rest of file is instructions
+
+        // To Do List
+        // ----------
         // Parse the instructions
         // Perform instructions
         // move instruction takes in from and to
