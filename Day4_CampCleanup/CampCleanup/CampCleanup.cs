@@ -8,7 +8,7 @@ public class Cleanup
     {
         string fileLocation = "C:\\Users\\Spore\\source\\repos\\AdventOfCode2022\\Day4_CampCleanup\\Day4Input.txt";
         Console.WriteLine(SumOfFullyContainedAssignments(fileLocation));
-
+        Console.WriteLine(SumOfOverlappingAssignments(fileLocation));
     }
 
     public static int SumOfFullyContainedAssignments(string fileLocation)
@@ -21,17 +21,39 @@ public class Cleanup
         return sum;
     }
 
+    public static int SumOfOverlappingAssignments(string fileLocation)
+    {
+        int sum = 0;
+        foreach (string assignmentPair in File.ReadLines(fileLocation))
+        {
+            if (AssignmentsOverlap(assignmentPair)) sum++;
+        }
+        return sum;
+    }
+
+    public static bool AssignmentsOverlap(string assignmentPair)
+    {
+        GetBoundsForEachAssignment(assignmentPair, out var firstBounds, out var secondBounds);
+        return !(firstBounds.lower > secondBounds.upper || firstBounds.upper < secondBounds.lower);
+    }
+
     public static bool OneAssignmentFullyContainsTheOther(string assignmentPair)
+    {
+        GetBoundsForEachAssignment(assignmentPair, out var firstBounds, out var secondBounds);
+        bool firstContainsAllSecond = firstBounds.lower <= secondBounds.lower && secondBounds.upper <= firstBounds.upper;
+        bool secondContainsAllFirst = secondBounds.lower <= firstBounds.lower && firstBounds.upper <= secondBounds.upper;
+        return firstContainsAllSecond || secondContainsAllFirst;
+    }
+
+    public static void GetBoundsForEachAssignment(string assignmentPair, out (int lower, int upper) firstBounds, out (int lower, int upper) secondBounds)
     {
         string[] splitAssignments = assignmentPair.Split(",");
 
-        var firstBounds = ParseAssignmentToUpperAndLowerBounds(splitAssignments[0]);
-        var secondBounds = ParseAssignmentToUpperAndLowerBounds(splitAssignments[1]);
-        // Check if one set of bounds fully contains the other.
-        return firstBounds.lower <= secondBounds.lower && firstBounds.upper >= secondBounds.upper || secondBounds.lower <= firstBounds.lower && secondBounds.upper >= firstBounds.upper;
+        firstBounds = ParseAssignmentToUpperAndLowerBounds(splitAssignments[0]);
+        secondBounds = ParseAssignmentToUpperAndLowerBounds(splitAssignments[1]);
     }
 
-    public static (int upper, int lower) ParseAssignmentToUpperAndLowerBounds(string bound)
+    public static (int lower, int upper) ParseAssignmentToUpperAndLowerBounds(string bound)
     {
         string[] splitBounds = bound.Split("-");
         int[] intBounds =
