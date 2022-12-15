@@ -7,7 +7,7 @@ public class RockPaperScissors
 {
     static void Main(string[] args)
     {
-        string fileLocation = "C:\\Users\\Spore\\source\\repos\\AdventOfCode2022\\Day2_RockPaperScissors\\Day2_RockPaperScissors\\Day3Input.txt";
+        string fileLocation = "C:\\Users\\Spore\\source\\repos\\AdventOfCode2022\\Day2_RockPaperScissors\\Day2_RockPaperScissors\\Day2Input.txt";
         Console.WriteLine(SumScoreForAllRounds(fileLocation));
     }
 
