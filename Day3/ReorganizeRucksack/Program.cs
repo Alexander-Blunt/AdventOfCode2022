@@ -14,14 +14,30 @@ internal class Program
 public class Rucksack
 {
     public int CompartmentSize { get; }
-    public string Compartment1 { get; }
-    public string Compartment2 { get; }
+    public string Compartment1 { get; set; } = "";
+    public string Compartment2 { get; set; } = "";
 
-    Rucksack(string contents)
+    public Rucksack(string contents)
     {
         CompartmentSize = contents.Length / 2;
         Compartment1 = contents.Substring(0, CompartmentSize);
         Compartment2 = contents.Substring(CompartmentSize);
+    }
+
+    public Rucksack(string compartment1, string compartment2)
+    {
+        if (compartment1.Length != compartment2.Length)
+        {
+            throw new ArgumentException("Compartments must be of equal length");
+        }
+        CompartmentSize = compartment1.Length;
+        Compartment1 = compartment1;
+        Compartment2 = compartment2;
+    }
+
+    public Rucksack(int compartmentSize)
+    {
+        CompartmentSize = compartmentSize;
     }
 
     public static int GetPriority(char item)
