@@ -6,7 +6,7 @@ public class Cleanup
 {
     static void Main(string[] args)
     {
-        string fileLocation = "C:\\Users\\Spore\\source\\repos\\AdventOfCode2022\\Day4_CampCleanup\\Day4Input.txt";
+        string fileLocation = @"C:\Users\Spore\source\repos\AdventOfCode2022\Day4_CampCleanup\Day4Input.txt";
         Console.WriteLine(SumOfFullyContainedAssignments(fileLocation));
         Console.WriteLine(SumOfOverlappingAssignments(fileLocation));
     }
