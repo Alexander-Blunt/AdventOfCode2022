@@ -4,11 +4,6 @@ namespace Day5SupplyStacksTests
 {
     public class SupplyStackTests
     {
-        [SetUp]
-        public void Setup()
-        {
-
-        }
 
         string[] input =
           { "    [D]    ",
@@ -36,9 +31,6 @@ namespace Day5SupplyStacksTests
             { 2, 2, 1 },
             { 1, 1, 2 } };
 
-        List<Stack<char>> expectedInitialStacks = new()
-        { new("ZN"), new("MCD"), new("P") };
-
         [Test]
         public void ValidInput_SplitInputIntoDiagramAndInstructions_ReturnsCorrectDiagram()
         {
@@ -56,6 +48,8 @@ namespace Day5SupplyStacksTests
         [Test]
         public void ValidInput_ConvertDiagramToStacks_ReturnsCorrectStacks()
         {
+            List<Stack<char>> expectedInitialStacks = new()
+        { new("ZN"), new("MCD"), new("P") };
             Assert.That(SupplyStacks.ConvertDiagramToStacks(expectedDiagram), Is.EqualTo(expectedInitialStacks));
         }
 
@@ -66,15 +60,31 @@ namespace Day5SupplyStacksTests
         }
 
         [Test]
-        public void ValidInput_FollowInstruction_CorrectlyAltersStacks()
+        public void ValidInput_FollowInstruction9000_CorrectlyAltersStacks()
         {
             //Arrange
-            List<Stack<char>> inputStacks = expectedInitialStacks;
-            int[] inputInstruction = { 1, 2, 1 };
-            List<Stack<char>> expectedFinalStacks = new() { new("ZND"), new("MC"), new("P") };
+            List<Stack<char>> inputStacks = new()
+        { new("ZN"), new("MCD"), new("P") }; ;
+            int[] inputInstruction = { 2, 2, 1 };
+            List<Stack<char>> expectedFinalStacks = new() { new("ZNDC"), new("M"), new("P") };
 
             //Act
-            SupplyStacks.FollowInstruction(inputInstruction, ref inputStacks);
+            SupplyStacks.FollowInstruction9000(inputInstruction, ref inputStacks);
+
+            Assert.That(inputStacks, Is.EqualTo(expectedFinalStacks));
+        }
+
+        [Test]
+        public void ValidInput_FollowInstruction9001_CorrectlyAltersStacks()
+        {
+            //Arrange
+            List<Stack<char>> inputStacks = new()
+        { new("ZN"), new("MCD"), new("P") }; ;
+            int[] inputInstruction = { 2, 2, 1 };
+            List<Stack<char>> expectedFinalStacks = new() { new("ZNCD"), new("M"), new("P") };
+
+            //Act
+            SupplyStacks.FollowInstruction9001(inputInstruction, ref inputStacks);
 
             Assert.That(inputStacks, Is.EqualTo(expectedFinalStacks));
         }

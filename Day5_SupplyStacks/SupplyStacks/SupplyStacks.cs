@@ -19,7 +19,7 @@ public class Program
         {
             int[] instruction = { parsedInstructions[i, 0],
             parsedInstructions[i, 1], parsedInstructions[i, 2] };
-            SupplyStacks.FollowInstruction(instruction, ref cargoStacks);
+            SupplyStacks.FollowInstruction9001(instruction, ref cargoStacks);
         }
         string output = "";
         foreach (Stack<char> stack in cargoStacks)
@@ -98,7 +98,7 @@ public class SupplyStacks
         return parsedInstructions;
     }
 
-    public static void FollowInstruction(int[] instruction, ref List<Stack<char>> cargoStacks)
+    public static void FollowInstruction9000(int[] instruction, ref List<Stack<char>> cargoStacks)
     {
         for (int i = 0; i < instruction[0]; i++)
         {
@@ -106,6 +106,18 @@ public class SupplyStacks
             cargoStacks[instruction[2]-1].Push(cargoToMove);
         }
     }
-    // Perform instructions
-    // move instruction takes in from and to
+
+    public static void FollowInstruction9001(int[] instruction, ref List<Stack<char>> cargoStacks)
+    {
+        Stack<char> cargoToMove = new("");
+        for (int i = 0; i < instruction[0]; i++)
+        {
+            cargoToMove.Push(cargoStacks[instruction[1] - 1].Pop());
+        }
+
+        for (int i = 0; i < instruction[0]; i++)
+        {
+            cargoStacks[instruction[2] - 1].Push(cargoToMove.Pop());
+        }
+    }
 }
