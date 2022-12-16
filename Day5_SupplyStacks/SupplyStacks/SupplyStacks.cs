@@ -34,7 +34,7 @@ namespace Day5SupplyStacks
                 }
             }
         }
-        // Setup the stacks
+
         public static List<Stack<char>> ConvertDiagramToStacks(List<string> diagram)
         {
             string lastLineOfDiagram = diagram.Last();
@@ -79,9 +79,14 @@ namespace Day5SupplyStacks
             return parsedInstructions;
         }
 
-        // To Do List
-        // ----------
-        // Parse the instructions
+        public static void FollowInstruction(int[] instruction, ref List<Stack<char>> cargoStacks)
+        {
+            for (int i = 0; i < instruction[0]; i++)
+            {
+                char cargoToMove = cargoStacks[instruction[1]-1].Pop();
+                cargoStacks[instruction[2]-1].Push(cargoToMove);
+            }
+        }
         // Perform instructions
         // move instruction takes in from and to
     }

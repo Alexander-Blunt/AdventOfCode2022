@@ -11,25 +11,34 @@ namespace Day5SupplyStacksTests
         }
 
         string[] input =
-              { "    [D]    ",
-                "[N] [C]    ",
-                "[Z] [M] [P]",
-                " 1   2   3 ",
-                "",
-                "move 1 from 2 to 1",
-                "move 3 from 1 to 3",
-                "move 2 from 2 to 1",
-                "move 1 from 1 to 2" };
+          { "    [D]    ",
+            "[N] [C]    ",
+            "[Z] [M] [P]",
+            " 1   2   3 ",
+            "",
+            "move 1 from 2 to 1",
+            "move 3 from 1 to 3",
+            "move 2 from 2 to 1",
+            "move 1 from 1 to 2" };
         List<string> expectedDiagram = new()
-              { "    [D]    ",
-                "[N] [C]    ",
-                "[Z] [M] [P]",
-                " 1   2   3 " };
+          { "    [D]    ",
+            "[N] [C]    ",
+            "[Z] [M] [P]",
+            " 1   2   3 " };
         List<string> expectedInstructions = new()
-              { "move 1 from 2 to 1",
-                "move 3 from 1 to 3",
-                "move 2 from 2 to 1",
-                "move 1 from 1 to 2" };
+          { "move 1 from 2 to 1",
+            "move 3 from 1 to 3",
+            "move 2 from 2 to 1",
+            "move 1 from 1 to 2" };
+        int[,] expectedParsedInstructions = 
+          { { 1, 2, 1 },
+            { 3, 1, 3 },
+            { 2, 2, 1 },
+            { 1, 1, 2 } };
+
+        List<Stack<char>> expectedInitialStacks = new()
+        { new("ZN"), new("MCD"), new("P") };
+
         [Test]
         public void ValidInput_SplitInputIntoDiagramAndInstructions_ReturnsCorrectDiagram()
         {
@@ -47,15 +56,27 @@ namespace Day5SupplyStacksTests
         [Test]
         public void ValidInput_ConvertDiagramToStacks_ReturnsCorrectStacks()
         {
-            List<Stack<char>> expectedStacks = new() { new("ZN"), new("MCD"), new("P") };
-            Assert.That(SupplyStacks.ConvertDiagramToStacks(expectedDiagram), Is.EqualTo(expectedStacks));
+            Assert.That(SupplyStacks.ConvertDiagramToStacks(expectedDiagram), Is.EqualTo(expectedInitialStacks));
         }
 
         [Test]
         public void ValidInput_ParseInstructions_RetrunsCorrectInstructions()
         {
-            int[,] expectedParsedInstructions = { { 1, 2, 1 }, { 3, 1, 3 }, { 2, 2, 1 }, { 1, 1, 2 } };
             Assert.That(SupplyStacks.ParseInstructions(expectedInstructions), Is.EqualTo(expectedParsedInstructions));
+        }
+
+        [Test]
+        public void ValidInput_FollowInstruction_CorrectlyAltersStacks()
+        {
+            //Arrange
+            List<Stack<char>> inputStacks = expectedInitialStacks;
+            int[] inputInstruction = { 1, 2, 1 };
+            List<Stack<char>> expectedFinalStacks = new() { new("ZND"), new("MC"), new("P") };
+
+            //Act
+            SupplyStacks.FollowInstruction(inputInstruction, ref inputStacks);
+
+            Assert.That(inputStacks, Is.EqualTo(expectedFinalStacks));
         }
     }
 }
