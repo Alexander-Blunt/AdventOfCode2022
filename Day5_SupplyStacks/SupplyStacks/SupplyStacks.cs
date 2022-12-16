@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Day5SupplyStacks
 {
@@ -36,7 +37,6 @@ namespace Day5SupplyStacks
         // Setup the stacks
         public static List<Stack<char>> ConvertDiagramToStacks(List<string> diagram)
         {
-            // Get Number of stacks, Equal to number of columns in last line once spaces are removed.
             string lastLineOfDiagram = diagram.Last();
             int numOfStacks = lastLineOfDiagram.Length / 4 + 1;
             List<Stack<char>> stacks = new();
@@ -57,6 +57,26 @@ namespace Day5SupplyStacks
                 }
             }
             return stacks;
+        }
+
+        public static int[,] ParseInstructions(List<string> instructions)
+        {
+            int[,] parsedInstructions = new int[instructions.Count, 3];
+            for(int i = 0; i < instructions.Count; i++)
+            {
+                string[] splitLine = instructions[i].Split(' ');
+                int j = 0;
+                foreach (string word in splitLine)
+                {
+                    // Filter numbers from each instruction line and convert to int32.
+                    if (int.TryParse(word, out int parsedWord))
+                    {
+                        parsedInstructions[i, j] = parsedWord;
+                        j++;
+                    }
+                }
+            }
+            return parsedInstructions;
         }
 
         // To Do List

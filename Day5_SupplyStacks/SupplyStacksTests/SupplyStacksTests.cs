@@ -47,13 +47,15 @@ namespace Day5SupplyStacksTests
         [Test]
         public void ValidInput_ConvertDiagramToStacks_ReturnsCorrectStacks()
         {
-            List<string> inputDiagram = new()
-              { "    [D]    ",
-                "[N] [C]    ",
-                "[Z] [M] [P]",
-                " 1   2   3 " };
             List<Stack<char>> expectedStacks = new() { new("ZN"), new("MCD"), new("P") };
-            Assert.That(SupplyStacks.ConvertDiagramToStacks(inputDiagram), Is.EqualTo(expectedStacks));
+            Assert.That(SupplyStacks.ConvertDiagramToStacks(expectedDiagram), Is.EqualTo(expectedStacks));
+        }
+
+        [Test]
+        public void ValidInput_ParseInstructions_RetrunsCorrectInstructions()
+        {
+            int[,] expectedParsedInstructions = { { 1, 2, 1 }, { 3, 1, 3 }, { 2, 2, 1 }, { 1, 1, 2 } };
+            Assert.That(SupplyStacks.ParseInstructions(expectedInstructions), Is.EqualTo(expectedParsedInstructions));
         }
     }
 }
