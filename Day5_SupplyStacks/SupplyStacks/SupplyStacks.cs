@@ -10,21 +10,21 @@ public class Program
         string fileLocation = "C:\\Users\\Spore\\source\\repos\\AdventOfCode2022\\Day5_SupplyStacks\\SupplyStacks\\Day5Input.txt";
         string[] rawInput = File.ReadAllLines(fileLocation);
 
-        SupplyStacks.SplitInputIntoDiagramAndInstructions(rawInput, out var diagram, out var instructions);
+        InputProcessing.SplitInputIntoDiagramAndInstructions(rawInput, out var diagram, out var instructions);
 
-        List<Stack<char>> cargoStacks = SupplyStacks.ConvertDiagramToStacks(diagram);
-        int[,] parsedInstructions = SupplyStacks.ParseInstructions(instructions);
+        SupplyStacks cargoStacks = new(diagram);
+        int[,] parsedInstructions = InputProcessing.ParseInstructions(instructions);
         
         for (int i = 0; i < parsedInstructions.GetLength(0); i++)
         {
             int[] instruction = { parsedInstructions[i, 0],
             parsedInstructions[i, 1], parsedInstructions[i, 2] };
-            SupplyStacks.FollowInstruction9001(instruction, ref cargoStacks);
+            cargoStacks.FollowInstruction9001(instruction);
         }
         string output = "";
-        foreach (Stack<char> stack in cargoStacks)
+        foreach (Stack<char> stack in cargoStacks.StackList)
         {
-            output += stack.Pop();
+            output += stack.First<char>();
         }
 
         Console.WriteLine(output);
@@ -32,6 +32,62 @@ public class Program
 }
 
 public class SupplyStacks
+{
+    public List<Stack<char>> StackList { get; }
+
+    public SupplyStacks (List<string> diagram)
+    {
+        string lastLineOfDiagram = diagram.Last();
+        int numOfStacks = lastLineOfDiagram.Length / 4 + 1;
+        StackList = new();
+        for (int i = 0; i < numOfStacks; i++)
+        {
+            StackList.Add(new());
+        }
+        // Loop through each line of the diagram from the bottom up, ignoring the bottom line.
+        for (int rowIndex = diagram.Count - 2; rowIndex >= 0; rowIndex--)
+        {
+            for (int columnIndex = 1; columnIndex < diagram[rowIndex].Length; columnIndex += 4)
+            {
+                int stackNumber = (columnIndex - 1) / 4;
+                if (diagram[rowIndex][columnIndex] != ' ')
+                {
+                    StackList[stackNumber].Push(diagram[rowIndex][columnIndex]);
+                }
+            }
+        }
+    }
+
+    public SupplyStacks (List<Stack<char>> stackList)
+    {
+        StackList = stackList;
+    }
+
+    public void FollowInstruction9000(int[] instruction)
+    {
+        for (int i = 0; i < instruction[0]; i++)
+        {
+            char cargoToMove = StackList[instruction[1]-1].Pop();
+            StackList[instruction[2]-1].Push(cargoToMove);
+        }
+    }
+
+    public void FollowInstruction9001(int[] instruction)
+    {
+        Stack<char> cargoToMove = new("");
+        for (int i = 0; i < instruction[0]; i++)
+        {
+            cargoToMove.Push(StackList[instruction[1] - 1].Pop());
+        }
+
+        for (int i = 0; i < instruction[0]; i++)
+        {
+            StackList[instruction[2] - 1].Push(cargoToMove.Pop());
+        }
+    }
+}
+
+public class InputProcessing
 {
     public static void SplitInputIntoDiagramAndInstructions(string[] input, out List<string> diagram, out List<string> instructions)
     {
@@ -54,34 +110,10 @@ public class SupplyStacks
         }
     }
 
-    public static List<Stack<char>> ConvertDiagramToStacks(List<string> diagram)
-    {
-        string lastLineOfDiagram = diagram.Last();
-        int numOfStacks = lastLineOfDiagram.Length / 4 + 1;
-        List<Stack<char>> stacks = new();
-        for (int i = 0; i < numOfStacks; i++)
-        {
-            stacks.Add(new());
-        }
-        // Loop through each line of the diagram from the bottom up, ignoring the bottom line.
-        for (int rowIndex = diagram.Count - 2; rowIndex >= 0; rowIndex--)
-        {
-            for (int columnIndex = 1; columnIndex < diagram[rowIndex].Length; columnIndex += 4)
-            {
-                int stackNumber = (columnIndex - 1) / 4;
-                if (diagram[rowIndex][columnIndex] != ' ')
-                {
-                    stacks[stackNumber].Push(diagram[rowIndex][columnIndex]);
-                }
-            }
-        }
-        return stacks;
-    }
-
     public static int[,] ParseInstructions(List<string> instructions)
     {
         int[,] parsedInstructions = new int[instructions.Count, 3];
-        for(int i = 0; i < instructions.Count; i++)
+        for (int i = 0; i < instructions.Count; i++)
         {
             string[] splitLine = instructions[i].Split(' ');
             int j = 0;
@@ -96,28 +128,5 @@ public class SupplyStacks
             }
         }
         return parsedInstructions;
-    }
-
-    public static void FollowInstruction9000(int[] instruction, ref List<Stack<char>> cargoStacks)
-    {
-        for (int i = 0; i < instruction[0]; i++)
-        {
-            char cargoToMove = cargoStacks[instruction[1]-1].Pop();
-            cargoStacks[instruction[2]-1].Push(cargoToMove);
-        }
-    }
-
-    public static void FollowInstruction9001(int[] instruction, ref List<Stack<char>> cargoStacks)
-    {
-        Stack<char> cargoToMove = new("");
-        for (int i = 0; i < instruction[0]; i++)
-        {
-            cargoToMove.Push(cargoStacks[instruction[1] - 1].Pop());
-        }
-
-        for (int i = 0; i < instruction[0]; i++)
-        {
-            cargoStacks[instruction[2] - 1].Push(cargoToMove.Pop());
-        }
     }
 }
