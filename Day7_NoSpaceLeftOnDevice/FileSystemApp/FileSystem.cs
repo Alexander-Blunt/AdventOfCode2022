@@ -10,49 +10,74 @@ public class Program
     }
 }
 
-public abstract class FileSystem
+public abstract class FileSystemItem
 {
+    private int _size;
+
     public string Name { get; }
 
-    public FileSystem(string name)
+    public virtual int Size
+    {
+        get
+        {
+            return _size;
+        }
+        set
+        {
+            _size = value;
+        }
+    }
+
+    public FileSystemItem(string name)
     {
         Name = name;
     }
 }
 
-public class File : FileSystem
+public class FileItem : FileSystemItem
 {
-    public int Size { get; set; }
-
-    public File(string[] sizeAndName) : base(sizeAndName[1])
+    public FileItem(string[] sizeAndName) : base(sizeAndName[1])
     {
         Size = int.Parse(sizeAndName[0]);
     }
 }
 
-public class Directory : FileSystem
+public class DirectoryItem : FileSystemItem
 {
-    public List<FileSystem> Contents { get; set; }
-
-    public Directory(string name) : base(name)
+    public override int Size
     {
-        Contents = new List<FileSystem>();
+        get
+        {
+            int sum = 0;
+            foreach (FileSystemItem item in Contents)
+            {
+                sum += item.Size;
+            }
+            return sum;
+        }
+        set
+        {
+            throw new InvalidOperationException("Cannot set size for a directory.");
+        }
     }
 
-    public void Add(FileSystem item)
+    public List<FileSystemItem> Contents { get; set; }
+
+    public DirectoryItem(string name) : base(name)
     {
-        Contents.Add(item);
+        Contents = new List<FileSystemItem>();
     }
 
-    public void LSItem(string[] splitLine)
+    public void Add(string lsLine)
     {
+        string[] splitLine = lsLine.Split(' ');
         if (splitLine[0] == "dir")
         {
-            Add(new Directory(splitLine[1]));
+            Contents.Add(new DirectoryItem(splitLine[1]));
         }
         else
         {
-            Add(new File(splitLine));
+            Contents.Add(new FileItem(splitLine));
         }
     }
 }
