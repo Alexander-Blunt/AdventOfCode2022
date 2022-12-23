@@ -4,27 +4,24 @@ namespace FileSystemTests;
 
 public class Tests
 {
-    [Test]
-    public void GivenAnInputString_FileItem_CreatesExpectedFile()
-    {
-        string[] sizeAndName = { "140", "AFile" };
-        FileItem testFile = new(sizeAndName);
+    DirectoryItem testRoot;
 
-        Assert.That(testFile.Name, Is.EqualTo(sizeAndName[1]));
-        Assert.That(testFile.Size, Is.EqualTo(140));
+    [SetUp]
+    public void Setup()
+    {
+        testRoot = new();
     }
 
     [Test]
-    public void GivenAFile_Add_AddsTheFileToADirectoryCorrectly()
+    public void GivenADirectory_Size_ReturnsSumOfContents()
     {
-        DirectoryItem testDirectory = new("/");
-        string[] fileDetails = { "14848514", "b.txt" };
-        FileItem expectedFile = new(fileDetails);
-        string lsLine = "14848514 b.txt";
+        testRoot.Add("a");
+        testRoot.Add("b", 10);
+        testRoot.ChangeDirectory("a").Add("c", 10);
 
-        testDirectory.Add(lsLine);
+        int expected = 20;
+        int output = testRoot.Size;
 
-        Assert.That(testDirectory.Contents[0].Size, Is.EqualTo(expectedFile.Size));
-        Assert.That(testDirectory.Contents[0].Name, Is.EqualTo(expectedFile.Name));
+        Assert.That(output, Is.EqualTo(expected));
     }
 }

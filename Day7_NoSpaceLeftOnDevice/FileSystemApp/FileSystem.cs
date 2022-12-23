@@ -6,8 +6,24 @@ public class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        string fileLocation = @"C:\Users\spore\source\repos\AdventOfCode2022\Day7_NoSpaceLeftOnDevice\FileSystemApp\Day7Input.txt";
+        string[] inputLines = File.ReadAllLines(fileLocation);
+
+        DirectoryItem rootDirectory = new();
+        DirectoryItem currentDirectory = rootDirectory;
+        foreach (string line in inputLines)
+        {
+            if (line.Contains("$ cd"))
+            {
+                currentDirectory = currentDirectory.ChangeDirectory(line.Substring(5));
+            }
+        }
     }
+}
+
+public interface IChildItem
+{
+    public DirectoryItem Parent { get; }
 }
 
 public abstract class FileSystemItem
@@ -28,17 +44,17 @@ public abstract class FileSystemItem
         }
     }
 
-    public FileSystemItem(string name)
-    {
-        Name = name;
-    }
+    public FileSystemItem() { }
 }
 
-public class FileItem : FileSystemItem
+public class FileItem : FileSystemItem, IChildItem
 {
-    public FileItem(string[] sizeAndName) : base(sizeAndName[1])
+    public DirectoryItem Parent { get; }
+
+    public FileItem(int size, DirectoryItem parent)
     {
-        Size = int.Parse(sizeAndName[0]);
+        Parent = parent;
+        Size = size;
     }
 }
 
@@ -49,9 +65,9 @@ public class DirectoryItem : FileSystemItem
         get
         {
             int sum = 0;
-            foreach (FileSystemItem item in Contents)
+            foreach (var item in Contents)
             {
-                sum += item.Size;
+                sum += item.Value.Size;
             }
             return sum;
         }
@@ -61,23 +77,36 @@ public class DirectoryItem : FileSystemItem
         }
     }
 
-    public List<FileSystemItem> Contents { get; set; }
+    public Dictionary<string, FileSystemItem> Contents { get; set; }
 
-    public DirectoryItem(string name) : base(name)
+    public DirectoryItem()
     {
-        Contents = new List<FileSystemItem>();
+        Contents = new Dictionary<string, FileSystemItem>();
     }
 
-    public void Add(string lsLine)
+    public void Add(string directoryName)
     {
-        string[] splitLine = lsLine.Split(' ');
-        if (splitLine[0] == "dir")
-        {
-            Contents.Add(new DirectoryItem(splitLine[1]));
-        }
-        else
-        {
-            Contents.Add(new FileItem(splitLine));
-        }
+        Contents.Add(directoryName, new ChildDirectory(this));
+    }
+
+    public void Add(string fileName, int fileSize)
+    {
+        Contents.Add(fileName, new FileItem(fileSize, this));
+    }
+
+    public DirectoryItem ChangeDirectory(string directoryName)
+    {
+        if (this.Contents.ContainsKey(directoryName)) return (DirectoryItem)this.Contents[directoryName];
+        else throw new FieldAccessException("Directory not found.");
+    }
+}
+
+public class ChildDirectory : DirectoryItem, IChildItem
+{
+    public DirectoryItem Parent { get; }
+
+    public ChildDirectory(DirectoryItem parent)
+    {
+        Parent = parent;
     }
 }
