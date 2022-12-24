@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 
 namespace FileSystem;
 
@@ -7,18 +8,51 @@ public class Program
     static void Main(string[] args)
     {
         string fileLocation = @"C:\Users\spore\source\repos\AdventOfCode2022\Day7_NoSpaceLeftOnDevice\FileSystemApp\Day7Input.txt";
-        string[] inputLines = File.ReadAllLines(fileLocation);
+        Console.WriteLine(GetSizeOfDirectoriesBelow100000(fileLocation));
+    }
+
+    public static int GetSizeOfDirectoriesBelow100000(string fileLocation)
+    {
+        List<string> inputLines = new(File.ReadAllLines(fileLocation));
+        inputLines.RemoveAt(0);
 
         DirectoryItem rootDirectory = new();
         DirectoryItem currentDirectory = rootDirectory;
+        List<DirectoryItem> directoryList = new();
+        directoryList.Add(rootDirectory);
         foreach (string line in inputLines)
         {
             if (line.Contains("$ cd"))
             {
                 currentDirectory = currentDirectory.ChangeDirectory(line.Substring(5));
             }
+            else if (!line.Contains("$"))
+            {
+                string[] splitLine = line.Split(' ');
+                if (int.TryParse(splitLine[0], out int number))
+                {
+                    currentDirectory.Add(splitLine[1], number);
+                }
+                else
+                {
+                    currentDirectory.Add(splitLine[1]);
+                    directoryList.Add((DirectoryItem)currentDirectory.Contents[splitLine[1]]);
+                }
+            }
         }
+
+        int sum = 0;
+        foreach (var item in directoryList)
+        {
+            int size = item.Size;
+            if (size < 100_000)
+            {
+                sum += size;
+            }
+        }
+        return sum;
     }
+
 }
 
 public interface IChildItem
@@ -94,7 +128,7 @@ public class DirectoryItem : FileSystemItem
         Contents.Add(fileName, new FileItem(fileSize, this));
     }
 
-    public DirectoryItem ChangeDirectory(string directoryName)
+    public virtual DirectoryItem ChangeDirectory(string directoryName)
     {
         if (this.Contents.ContainsKey(directoryName)) return (DirectoryItem)this.Contents[directoryName];
         else throw new FieldAccessException("Directory not found.");
@@ -108,5 +142,11 @@ public class ChildDirectory : DirectoryItem, IChildItem
     public ChildDirectory(DirectoryItem parent)
     {
         Parent = parent;
+    }
+
+    public override DirectoryItem ChangeDirectory(string directoryName)
+    {
+        if (directoryName == "..") return Parent;
+        else return base.ChangeDirectory(directoryName);
     }
 }
