@@ -8,10 +8,40 @@ public class Program
     static void Main(string[] args)
     {
         string fileLocation = @"C:\Users\spore\source\repos\AdventOfCode2022\Day7_NoSpaceLeftOnDevice\FileSystemApp\Day7Input.txt";
-        Console.WriteLine(GetSizeOfDirectoriesBelow100000(fileLocation));
+        List<DirectoryItem> directoryList = CreateDirectoryList(fileLocation);
+
+        //Get sum of directories with size < 100_000
+        int sum = 0;
+        foreach (var directory in directoryList)
+        {
+            int size = directory.Size;
+            if (size < 100_000)
+            {
+                sum += size;
+            }
+        }
+        Console.WriteLine(sum);
+
+        //Get directory size for deletion
+        int totalSpace = 70_000_000;
+        int requiredSpace = 30_000_000;
+        int currentSize = directoryList[0].Size;
+        int targetSize = totalSpace - requiredSpace;
+        int deletableSize = totalSpace;
+
+        foreach (var directory in directoryList)
+        {
+            int directorySize = directory.Size;
+            if (currentSize - directorySize < targetSize &&
+            directorySize < deletableSize)
+            {
+                deletableSize = directorySize;
+            }
+        }
+        Console.WriteLine(deletableSize);
     }
 
-    public static int GetSizeOfDirectoriesBelow100000(string fileLocation)
+    public static List<DirectoryItem> CreateDirectoryList(string fileLocation)
     {
         List<string> inputLines = new(File.ReadAllLines(fileLocation));
         inputLines.RemoveAt(0);
@@ -40,17 +70,7 @@ public class Program
                 }
             }
         }
-
-        int sum = 0;
-        foreach (var item in directoryList)
-        {
-            int size = item.Size;
-            if (size < 100_000)
-            {
-                sum += size;
-            }
-        }
-        return sum;
+        return directoryList;
     }
 
 }
