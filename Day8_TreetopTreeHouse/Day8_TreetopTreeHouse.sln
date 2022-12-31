@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreetopTreeHouse", "TreetopTreeHouse\TreetopTreeHouse.csproj", "{4C612C15-80A4-4872-BB1E-8AB1AA06196E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreetopTreeHouseTests", "TreetopTreeHouseTests\TreetopTreeHouseTests.csproj", "{064BBC97-1DA1-4118-8215-46D6B1526E54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4C612C15-80A4-4872-BB1E-8AB1AA06196E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C612C15-80A4-4872-BB1E-8AB1AA06196E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C612C15-80A4-4872-BB1E-8AB1AA06196E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{064BBC97-1DA1-4118-8215-46D6B1526E54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{064BBC97-1DA1-4118-8215-46D6B1526E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{064BBC97-1DA1-4118-8215-46D6B1526E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{064BBC97-1DA1-4118-8215-46D6B1526E54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
