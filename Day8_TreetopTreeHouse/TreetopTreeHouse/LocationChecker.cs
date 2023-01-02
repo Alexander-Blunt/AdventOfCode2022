@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace TreetopTreeHouse;
@@ -20,7 +21,7 @@ public class Grove
         }
         else
         {
-            //Check East
+            //Check Left
             bool isVisible = true;
             for (int k = xLocation - 1; k >= 0; k--)
             {
@@ -35,7 +36,7 @@ public class Grove
                 return true;
             }
 
-            //Check West
+            //Check Right
             isVisible = true;
             for (int k = xLocation + 1; k < TreeGrid.GetLength(0); k++)
             {
@@ -50,7 +51,7 @@ public class Grove
                 return true;
             }
 
-            //Check North
+            //Check Up
             isVisible = true;
             for (int k = yLocation - 1; k >= 0; k--)
             {
@@ -65,7 +66,7 @@ public class Grove
                 return true;
             }
 
-            //Check South
+            //Check Down
             isVisible = true;
             for (int k = yLocation + 1; k < TreeGrid.GetLength(1); k++)
             {
@@ -84,6 +85,54 @@ public class Grove
                 return false;
             }
         }
+    }
+
+    public int GetScenicScore(int xLocation, int yLocation)
+    {
+        //Get left score
+        int leftScore = 0;
+        for (int k = xLocation - 1; k >= 0; k--)
+        {
+            leftScore++;
+            if (TreeGrid[k, yLocation] >= TreeGrid[xLocation, yLocation])
+            {
+                break;
+            }
+        }
+
+        //Get right score
+        int rightScore = 0;
+        for (int k = xLocation + 1; k < TreeGrid.GetLength(0); k++)
+        {
+            rightScore++;
+            if (TreeGrid[k, yLocation] >= TreeGrid[xLocation, yLocation])
+            {
+                break;
+            }
+        }
+
+        //Get up score
+        int upScore = 0;
+        for (int k = yLocation - 1; k >= 0; k--)
+        {
+            upScore++;
+            if (TreeGrid[xLocation, k] >= TreeGrid[xLocation, yLocation])
+            {
+                break;
+            }
+        }
+
+        //Get down score
+        int downScore = 0;
+        for (int k = yLocation + 1; k < TreeGrid.GetLength(1); k++)
+        {
+            downScore++;
+            if (TreeGrid[xLocation, k] >= TreeGrid[xLocation, yLocation])
+            {
+                break;
+            }
+        }
+        return leftScore * rightScore * upScore * downScore;
     }
 }
 
@@ -117,5 +166,20 @@ public class Program
         }
 
         Console.WriteLine(sumOfVisibleTrees);
+
+        int highestScenicScore = 0;
+        for (int i = 0; i < xLength; i++)
+        {
+            for (int j = 0; j < yLength; j++)
+            {
+                int scenicScore = inputGrove.GetScenicScore(i, j);
+                if (scenicScore > highestScenicScore)
+                {
+                    highestScenicScore = scenicScore;
+                }
+            }
+        }
+
+        Console.WriteLine(highestScenicScore);
     }
 }
