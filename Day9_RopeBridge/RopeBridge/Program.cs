@@ -2,23 +2,7 @@
 
 public class Rope
 {
-    int[] _head;
-
-    public int[] Head
-    {
-        get
-        {
-            return _head;
-        }
-        set
-        {
-            _head = value;
-            if (+(_head[0] - Tail[0]) > 2)
-            {
-
-            }
-        }
-    }
+    public int[] Head { get; set; }
     public int[] Tail { get; private set; }
 
     public Rope()
@@ -27,9 +11,25 @@ public class Rope
         Tail = new[] { 0, 0 };
     }
 
-    public Rope MoveUp(int numberOfSteps)
+    private void UpdateTail()
     {
-        throw new NotImplementedException();
+        int yDifference = Head[1] - Tail[1];
+        if (yDifference > 1) Tail[1]++;
+        else if (yDifference < -1) Tail[1]--;
+    }
+
+    public Rope MoveUp()
+    {
+        Head[1]++;
+        this.UpdateTail();
+        return this;
+    }
+
+    public Rope MoveDown()
+    {
+        Head[1]--;
+        this.UpdateTail();
+        return this;
     }
 }
 
