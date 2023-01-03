@@ -13,78 +13,62 @@ public class Grove
         TreeGrid = intGrid;
     }
 
+    private bool TreeIsVisibleFrom(int xLocation, int yLocation, string direction)
+    {
+        int start = 0;
+        int finish = 0;
+        ref int xOfTreeToCompare = ref xLocation;
+        ref int yOfTreeToCompare = ref yLocation;
+        int i = 0;
+        switch (direction.ToLower())
+        {
+            case "left":
+                finish = xLocation;
+                xOfTreeToCompare = ref i;
+                break;
+            case "right":
+                start = xLocation + 1;
+                finish = TreeGrid.GetLength(0);
+                xOfTreeToCompare = ref i;
+                break;
+            case "up":
+                finish = yLocation;
+                yOfTreeToCompare = ref i;
+                break;
+            case "down":
+                start = yLocation + 1;
+                finish = TreeGrid.GetLength(1);
+                yOfTreeToCompare = ref i;
+                break;
+            default:
+                throw new ArgumentException("Direction must be one of the following: \"left\", \"right\", \"up\" or \"down\".");
+        }
+
+        for (i = start; i < finish; i++)
+        {
+            if (TreeGrid[xOfTreeToCompare, yOfTreeToCompare] >= TreeGrid[xLocation, yLocation])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public bool TreeIsVisible(int xLocation, int yLocation)
     {
         if (xLocation == 0 || xLocation == TreeGrid.GetLength(0) - 1 || yLocation == 0 || yLocation == TreeGrid.GetLength(1) - 1)
         {
             return true;
         }
-        else
+        else if (
+            TreeIsVisibleFrom(xLocation, yLocation, "left") ||
+            TreeIsVisibleFrom(xLocation, yLocation, "right") ||
+            TreeIsVisibleFrom(xLocation, yLocation, "up") ||
+            TreeIsVisibleFrom(xLocation, yLocation, "down"))
         {
-            //Check Left
-            bool isVisible = true;
-            for (int k = xLocation - 1; k >= 0; k--)
-            {
-                if (TreeGrid[k, yLocation] >= TreeGrid[xLocation, yLocation])
-                {
-                    isVisible = false;
-                    break;
-                }
-            }
-            if (isVisible)
-            {
-                return true;
-            }
-
-            //Check Right
-            isVisible = true;
-            for (int k = xLocation + 1; k < TreeGrid.GetLength(0); k++)
-            {
-                if (TreeGrid[k, yLocation] >= TreeGrid[xLocation, yLocation])
-                {
-                    isVisible = false;
-                    break;
-                }
-            }
-            if (isVisible)
-            {
-                return true;
-            }
-
-            //Check Up
-            isVisible = true;
-            for (int k = yLocation - 1; k >= 0; k--)
-            {
-                if (TreeGrid[xLocation, k] >= TreeGrid[xLocation, yLocation])
-                {
-                    isVisible = false;
-                    break;
-                }
-            }
-            if (isVisible)
-            {
-                return true;
-            }
-
-            //Check Down
-            isVisible = true;
-            for (int k = yLocation + 1; k < TreeGrid.GetLength(1); k++)
-            {
-                if (TreeGrid[xLocation, k] >= TreeGrid[xLocation, yLocation])
-                {
-                    isVisible = false;
-                    break;
-                }
-            }
-            if (isVisible)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
+        else return false;
     }
 
     public int GetScenicScore(int xLocation, int yLocation)
