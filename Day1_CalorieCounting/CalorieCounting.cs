@@ -7,50 +7,11 @@ public class CalorieCounting
 {
     static void Main(string[] args)
     {
-        string fileLocation = "..\\..\\..\\Day1Input.txt";
-        Console.WriteLine(FindHighestCalorieTotal(fileLocation));
-        Console.WriteLine(FindTotalOfHighetThree(fileLocation));
-    }
+        string fileLocation = @"C:\Users\Spore\source\repos\AdventOfCode2022\Day1_CalorieCounting\Day1Input.txt";
+        List<int> caloriesForEachElf = GetCaloriesForEachElf(fileLocation);
 
-    public static int FindHighestCalorieTotal(string fileLocation)
-    {
-        List<int> totalCaloriesForEachElf = GetCaloriesForEachElf(fileLocation);
-
-        int highest = totalCaloriesForEachElf[0];
-        // Used a for loop to avoid comparing the first item to itself.
-        for (int i = 1; i < totalCaloriesForEachElf.Count; i++)
-        {
-            if (highest < totalCaloriesForEachElf[i]) highest = totalCaloriesForEachElf[i];
-        }
-        return highest;
-    }
-
-    public static int FindTotalOfHighetThree(string fileLocation)
-    {
-        List<int> totalCaloriesForEachElf = GetCaloriesForEachElf(fileLocation);
-
-        // From highest to lowest.
-        int[] highestThree = { totalCaloriesForEachElf[0], 0, 0 };
-        // Used a for loop to avoid comparing the first item to itself.
-        for (int i = 1; i < totalCaloriesForEachElf.Count; i++)
-        {
-            if (highestThree[0] < totalCaloriesForEachElf[i])
-            {
-                highestThree[2] = highestThree[1];
-                highestThree[1] = highestThree[0];
-                highestThree[0] = totalCaloriesForEachElf[i];
-            }
-            else if (highestThree[1] < totalCaloriesForEachElf[i])
-            {
-                highestThree[2] = highestThree[1];
-                highestThree[1] = totalCaloriesForEachElf[i];
-            }
-            else if (highestThree[2] < totalCaloriesForEachElf[i])
-            {
-                highestThree[2] = totalCaloriesForEachElf[i];
-            }
-        }
-        return highestThree.Sum();
+        Console.WriteLine(FindHighestCalorieTotal(caloriesForEachElf));
+        Console.WriteLine(FindTotalOfHighetThree(caloriesForEachElf));
     }
 
     public static List<int> GetCaloriesForEachElf(string fileLocation)
@@ -59,9 +20,7 @@ public class CalorieCounting
         int elfNumber = 0;
         foreach (string line in File.ReadLines(fileLocation))
         {
-            // If a line is not empty, add its value to the total for that elf.
             if (!String.IsNullOrEmpty(line)) caloriesForEachElf[elfNumber] += Int32.Parse(line);
-            // Otherwise add a new elf to the list.
             else
             {
                 caloriesForEachElf.Add(0);
@@ -69,5 +28,42 @@ public class CalorieCounting
             }
         }
         return caloriesForEachElf;
+    }
+
+    public static int FindHighestCalorieTotal(List<int> caloriesForEachElf)
+    {
+        int highest = caloriesForEachElf[0];
+        // Used a for loop to avoid comparing the first item to itself.
+        for (int i = 1; i < caloriesForEachElf.Count; i++)
+        {
+            if (highest < caloriesForEachElf[i]) highest = caloriesForEachElf[i];
+        }
+        return highest;
+    }
+
+    public static int FindTotalOfHighetThree(List<int> caloriesForEachElf)
+    {
+        // From highest to lowest.
+        int[] highestThree = { caloriesForEachElf[0], 0, 0 };
+        // Used a for loop to avoid comparing the first item to itself.
+        for (int i = 1; i < caloriesForEachElf.Count; i++)
+        {
+            if (highestThree[0] < caloriesForEachElf[i])
+            {
+                highestThree[2] = highestThree[1];
+                highestThree[1] = highestThree[0];
+                highestThree[0] = caloriesForEachElf[i];
+            }
+            else if (highestThree[1] < caloriesForEachElf[i])
+            {
+                highestThree[2] = highestThree[1];
+                highestThree[1] = caloriesForEachElf[i];
+            }
+            else if (highestThree[2] < caloriesForEachElf[i])
+            {
+                highestThree[2] = caloriesForEachElf[i];
+            }
+        }
+        return highestThree.Sum();
     }
 }
