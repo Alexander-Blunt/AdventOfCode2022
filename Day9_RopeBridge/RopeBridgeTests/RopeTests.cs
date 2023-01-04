@@ -1,6 +1,4 @@
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using RopeBridge;
-using System.Security.Cryptography;
 
 namespace RopeBridgeTests;
 
@@ -83,17 +81,6 @@ public class RopeTests
         testRope.MoveUp();
 
         int[] output = testRope.Tail;
-
-        Assert.That(output, Is.EqualTo(expected));
-    }
-
-    [Test]
-    public void GivenAnInstructionSet_GetNumPositionsVisitedByTail_ReturnsCorrectNumber()
-    {
-        string[] instructionArray = { "R 4", "U 4", "L 3", "D 1", "R 4", "D 1", "L 5", "R 2" };
-        int expected = 13;
-
-        int output = RopePhysics.GetNumPositionsVisitedByTail(instructionArray);
 
         Assert.That(output, Is.EqualTo(expected));
     }

@@ -75,8 +75,44 @@ public class RopePhysics
         Console.WriteLine("Hello, World!");
     }
 
-    public static int GetNumPositionsVisitedByTail(string[] instructionArray)
+    public static int GetNumPositionsVisitedByTail(string[] instructionArray, Rope rope)
     {
-        throw new NotImplementedException();
+        List<int[]> tailTrail = new() { rope.Tail };
+        int numPositionsVisited = 0;
+        foreach (string instruction in instructionArray)
+        {
+            int numRepetitions = int.Parse(instruction.Substring(2));
+            for (int i = 0; i < numRepetitions; i++)
+            {
+                switch (instruction[0])
+                {
+                    case 'U':
+                        rope.MoveUp();
+                        break;
+
+                    case 'D':
+                        rope.MoveDown();
+                        break;
+
+                    case 'L':
+                        rope.MoveLeft();
+                        break;
+
+                    case 'R':
+                        rope.MoveRight();
+                        break;
+
+                    default:
+                        break;
+                }
+                if (!tailTrail.Exists(x => x[0] == rope.Tail[0] && x[1] == rope.Tail[1]))
+                {
+                    numPositionsVisited++;
+                    int[] temp = rope.Tail;
+                    tailTrail.Add(temp);
+                }
+            }
+        }
+        return numPositionsVisited;
     }
 }
