@@ -68,10 +68,15 @@ public class Rope
     }
 }
 
-internal class Program
+public class RopePhysics
 {
     static void Main(string[] args)
     {
         Console.WriteLine("Hello, World!");
+    }
+
+    public static int GetNumPositionsVisitedByTail(string[] instructionArray)
+    {
+        throw new NotImplementedException();
     }
 }
