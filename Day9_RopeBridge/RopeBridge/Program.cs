@@ -16,11 +16,27 @@ public class Rope
         int xDifference = Head[0] - Tail[0];
         int yDifference = Head[1] - Tail[1];
 
-        if (xDifference > 1) Tail[0]++;
-        else if (xDifference < -1) Tail[0]--;
+        if (xDifference > 1)
+        {
+            Tail[0]++;
+            Tail[1] += yDifference;
+        }
+        else if (xDifference < -1)
+        {
+            Tail[0]--;
+            Tail[1] += yDifference;
+        }
 
-        if (yDifference > 1) Tail[1]++;
-        else if (yDifference < -1) Tail[1]--;
+        if (yDifference > 1)
+        {
+            Tail[1]++;
+            Tail[0] += xDifference;
+        }
+        else if (yDifference < -1)
+        {
+            Tail[1]--;
+            Tail[0] += xDifference;
+        }
     }
 
     public Rope MoveUp()

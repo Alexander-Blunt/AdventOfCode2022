@@ -1,15 +1,23 @@
 using RopeBridge;
+using System.Security.Cryptography;
+
 namespace RopeBridgeTests;
 
 public class RopeTests
 {
+    Rope testRope;
+    [SetUp]
+    public void Setup()
+    {
+        testRope = new();
+    }
+
     [TestCase(2, 0, 1)]
     [TestCase(1, 0, 0)]
     [TestCase(3, 0, 2)]
     public void GivenTheHeadMovesUp_TheTail_CorrectlyFollows(int numberOfSteps, int expectedTailX, int expectedTailY)
     {
         int[] expected = { expectedTailX, expectedTailY };
-        Rope testRope = new();
         for (int i = 0; i < numberOfSteps; i++)
         {
             testRope.MoveUp();
@@ -25,7 +33,6 @@ public class RopeTests
     public void GivenTheHeadMovesDown_TheTail_CorrectlyFollows(int numberOfSteps, int expectedTailX, int expectedTailY)
     {
         int[] expected = { expectedTailX, expectedTailY };
-        Rope testRope = new();
         for (int i = 0; i < numberOfSteps; i++)
         {
             testRope.MoveDown();
@@ -41,7 +48,6 @@ public class RopeTests
     public void GivenTheHeadMovesLeft_TheTail_CorrectlyFollows(int numberOfSteps, int expectedTailX, int expectedTailY)
     {
         int[] expected = { expectedTailX, expectedTailY };
-        Rope testRope = new();
         for (int i = 0; i < numberOfSteps; i++)
         {
             testRope.MoveLeft();
@@ -57,11 +63,24 @@ public class RopeTests
     public void GivenTheHeadMovesRight_TheTail_CorrectlyFollows(int numberOfSteps, int expectedTailX, int expectedTailY)
     {
         int[] expected = { expectedTailX, expectedTailY };
-        Rope testRope = new();
         for (int i = 0; i < numberOfSteps; i++)
         {
             testRope.MoveRight();
         }
+        int[] output = testRope.Tail;
+
+        Assert.That(output, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void GivenTheHeadMovesDiagonally_TheTail_CorrectlyFollows()
+    {
+        int[] expected = { 1, 1 };
+
+        testRope.MoveUp();
+        testRope.MoveRight();
+        testRope.MoveUp();
+
         int[] output = testRope.Tail;
 
         Assert.That(output, Is.EqualTo(expected));
