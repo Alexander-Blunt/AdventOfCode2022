@@ -16,12 +16,12 @@ public class RopeTests
     [TestCase(3, 0, 2)]
     public void GivenTheHeadMovesUp_TheTail_CorrectlyFollows(int numberOfSteps, int expectedTailX, int expectedTailY)
     {
-        int[] expected = { expectedTailX, expectedTailY };
+        Point2D expected = new(expectedTailX, expectedTailY);
         for (int i = 0; i < numberOfSteps; i++)
         {
-            testRope.MoveUp();
+            testRope.MoveHeadUp();
         }
-        int[] output = testRope.Tail;
+        Point2D output = testRope.Tail;
 
         Assert.That(output, Is.EqualTo(expected));
     }
@@ -31,12 +31,12 @@ public class RopeTests
     [TestCase(3, 0, -2)]
     public void GivenTheHeadMovesDown_TheTail_CorrectlyFollows(int numberOfSteps, int expectedTailX, int expectedTailY)
     {
-        int[] expected = { expectedTailX, expectedTailY };
+        Point2D expected = new(expectedTailX, expectedTailY);
         for (int i = 0; i < numberOfSteps; i++)
         {
-            testRope.MoveDown();
+            testRope.MoveHeadDown();
         }
-        int[] output = testRope.Tail;
+        Point2D output = testRope.Tail;
 
         Assert.That(output, Is.EqualTo(expected));
     }
@@ -46,12 +46,12 @@ public class RopeTests
     [TestCase(3, -2, 0)]
     public void GivenTheHeadMovesLeft_TheTail_CorrectlyFollows(int numberOfSteps, int expectedTailX, int expectedTailY)
     {
-        int[] expected = { expectedTailX, expectedTailY };
+        Point2D expected = new(expectedTailX, expectedTailY);
         for (int i = 0; i < numberOfSteps; i++)
         {
-            testRope.MoveLeft();
+            testRope.MoveHeadLeft();
         }
-        int[] output = testRope.Tail;
+        Point2D output = testRope.Tail;
 
         Assert.That(output, Is.EqualTo(expected));
     }
@@ -61,12 +61,12 @@ public class RopeTests
     [TestCase(3, 2, 0)]
     public void GivenTheHeadMovesRight_TheTail_CorrectlyFollows(int numberOfSteps, int expectedTailX, int expectedTailY)
     {
-        int[] expected = { expectedTailX, expectedTailY };
+        Point2D expected = new(expectedTailX, expectedTailY);
         for (int i = 0; i < numberOfSteps; i++)
         {
-            testRope.MoveRight();
+            testRope.MoveHeadRight();
         }
-        int[] output = testRope.Tail;
+        Point2D output = testRope.Tail;
 
         Assert.That(output, Is.EqualTo(expected));
     }
@@ -74,13 +74,13 @@ public class RopeTests
     [Test]
     public void GivenTheHeadMovesDiagonally_TheTail_CorrectlyFollows()
     {
-        int[] expected = { 1, 1 };
+        Point2D expected = new(1, 1);
 
-        testRope.MoveUp();
-        testRope.MoveRight();
-        testRope.MoveUp();
+        testRope.MoveHeadUp();
+        testRope.MoveHeadRight();
+        testRope.MoveHeadUp();
 
-        int[] output = testRope.Tail;
+        Point2D output = testRope.Tail;
 
         Assert.That(output, Is.EqualTo(expected));
     }
