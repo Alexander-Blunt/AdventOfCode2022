@@ -6,80 +6,97 @@ namespace RopeBridge;
 
 public class Rope
 {
-    public Point2D Head { get; set; }
-    public Point2D Tail { get; private set; }
+    private Point2D[] _knots;
+    public int Length { get; private set; }
+    public Point2D Head
+    {
+        get { return _knots[0]; }
+        private set { _knots[0] = value; }
+    }
+    public Point2D Tail
+    {
+        get { return _knots[Length - 1]; }
+    }
+
+    private Point2D[] InitializeKnots()
+    {
+        Point2D[] knots = new Point2D[Length];
+        for (int i = 0; i < Length; i++)
+        {
+            knots[i] = new Point2D(0, 0);
+        }
+        return knots;
+    }
 
     public Rope()
     {
-        Head = new(0, 0);
-        Tail = new(0, 0);
+        Length = 2;
+        _knots = InitializeKnots();
     }
 
-    public Rope(int x, int y)
+    public Rope(int length)
     {
-        Head = new(x, y);
-        Tail = new(x, y);
+        Length = length;
+        _knots = InitializeKnots();
     }
 
-    private Rope MoveTailUp()
+    private void UpdateKnots()
     {
-        Tail = Tail.Add(0, 1);
-        return this;
-    }
-
-    private Rope MoveTailDown()
-    {
-        Tail = Tail.Subtract(0, 1);
-        return this;
-    }
-
-    private Rope MoveTailLeft()
-    {
-        Tail = Tail.Subtract(1, 0);
-        return this;
-    }
-
-    private Rope MoveTailRight()
-    {
-        Tail = Tail.Add(1, 0);
-        return this;
-    }
-
-    private void UpdateTail()
-    {
-        Point2D headTailDiff = Head.Subtract(Tail);
-
-        if (headTailDiff.X > 1) MoveTailRight();
-        if (headTailDiff.X < -1) MoveTailLeft();
-        if (headTailDiff.Y > 1) MoveTailUp();
-        if (headTailDiff.Y < -1) MoveTailDown();
+        for (int i = 1; i < Length; i++)
+        {
+            Point2D positionDiff = _knots[i - 1].Subtract(_knots[i]);
+            if (positionDiff.Y > 1)
+            {
+                _knots[i] = _knots[i].Add(0, 1);
+                if (positionDiff.X > 0) _knots[i] = _knots[i].Add(1, 0);
+                else if (positionDiff.X < 0) _knots[i] = _knots[i].Subtract(1, 0);
+            }
+            else if (positionDiff.Y < -1)
+            {
+                _knots[i] = _knots[i].Subtract(0, 1);
+                if (positionDiff.X > 0) _knots[i] = _knots[i].Add(1, 0);
+                else if (positionDiff.X < 0) _knots[i] = _knots[i].Subtract(1, 0);
+            }
+            if (positionDiff.X > 1)
+            {
+                _knots[i] = _knots[i].Add(1, 0);
+                if (positionDiff.Y > 0) _knots[i] = _knots[i].Add(0, 1);
+                else if (positionDiff.Y < 0) _knots[i] = _knots[i].Subtract(0, 1);
+            }
+            else if (positionDiff.X < -1)
+            {
+                _knots[i] = _knots[i].Subtract(1, 0);
+                if (positionDiff.Y > 0) _knots[i] = _knots[i].Add(0, 1);
+                else if (positionDiff.Y < 0) _knots[i] = _knots[i].Subtract(0, 1);
+            }
+        }
     }
 
     public Rope MoveHeadUp()
     {
         Head = Head.Add(0, 1);
-        UpdateTail();
+        UpdateKnots();
         return this;
     }
 
     public Rope MoveHeadDown()
     {
         Head = Head.Subtract(0, 1);
-        UpdateTail();
+        UpdateKnots();
         return this;
     }
 
     public Rope MoveHeadLeft()
     {
         Head = Head.Subtract(1, 0);
-        UpdateTail();
+        UpdateKnots();
         return this;
     }
 
     public Rope MoveHeadRight()
     {
         Head = Head.Add(1, 0);
-        UpdateTail();
+        UpdateKnots();
         return this;
     }
 }
@@ -89,7 +106,6 @@ public class RopePhysics
     public static int GetNumPositionsVisitedByTail(string[] instructionArray, Rope rope)
     {
         List<Point2D> tailTrail = new() { rope.Tail };
-        int numPositionsVisited = 0;
         foreach (string instruction in instructionArray)
         {
             int numRepetitions = int.Parse(instruction.Substring(2));
@@ -118,17 +134,25 @@ public class RopePhysics
                 }
                 if (!tailTrail.Contains(rope.Tail))
                 {
-                    numPositionsVisited++;
                     tailTrail.Add(rope.Tail);
                 }
             }
         }
-        return numPositionsVisited;
+        return tailTrail.Count;
     }
 
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        string fileLocation = @"C:\Users\Spore\source\repos\AdventOfCode2022\Day9_RopeBridge\RopeBridge\Day9Input.txt";
+
+        string[] instructionArray = File.ReadAllLines(fileLocation);
+
+        Rope rope = new();
+
+        Console.WriteLine(RopePhysics.GetNumPositionsVisitedByTail(instructionArray, rope));
+
+        rope = new(10);
+        Console.WriteLine(RopePhysics.GetNumPositionsVisitedByTail(instructionArray, rope));
     }
 
 }

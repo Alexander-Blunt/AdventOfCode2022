@@ -68,6 +68,11 @@ namespace RopeBridge
             return HashCode.Combine(X, Y);
         }
 
+        public override string? ToString()
+        {
+            return $"{base.ToString()} ({X}, {Y})";
+        }
+
         public static bool operator ==(Point2D left, Point2D right)
         {
             return left.Equals(right);
