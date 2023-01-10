@@ -45,6 +45,7 @@ public class Rope
         for (int i = 1; i < Length; i++)
         {
             Point2D positionDiff = _knots[i - 1].Subtract(_knots[i]);
+            if (positionDiff.X <= 1 && positionDiff.X >= -1 && positionDiff.Y <= 1 && positionDiff.Y >= -1) break;
             if (positionDiff.Y > 1)
             {
                 _knots[i] = _knots[i].Add(0, 1);
@@ -57,7 +58,7 @@ public class Rope
                 if (positionDiff.X > 0) _knots[i] = _knots[i].Add(1, 0);
                 else if (positionDiff.X < 0) _knots[i] = _knots[i].Subtract(1, 0);
             }
-            if (positionDiff.X > 1)
+            else if (positionDiff.X > 1)
             {
                 _knots[i] = _knots[i].Add(1, 0);
                 if (positionDiff.Y > 0) _knots[i] = _knots[i].Add(0, 1);
