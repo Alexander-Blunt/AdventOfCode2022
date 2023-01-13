@@ -11,10 +11,12 @@ public interface ICPUMonitor
     public void CPUUpdate(int cycle, int xReg);
 }
 
-public class SignalStrengthReader : ICPUMonitor
+public class SignalStrengthMonitor : ICPUMonitor
 {
+    public int SignalStrength { get; private set; } = 0;
+
     public void CPUUpdate(int cycle, int xReg)
     {
-        throw new NotImplementedException();
+        if ((cycle - 20) % 40 == 0) SignalStrength += cycle * xReg;
     }
 }

@@ -25,7 +25,7 @@ public class CPUTests
     public void GivenACPU_Add_Adds2ToCycles()
     {
         int expected = 2;
-        testCPU.Add(3);
+        testCPU.AddX(3);
         int actual = testCPU.CurrentCycle;
 
         Assert.That(actual, Is.EqualTo(expected));
@@ -36,7 +36,7 @@ public class CPUTests
     [TestCase(-2, -1)]
     public void GivenACPU_Add_AddsCorrectNumberToXReg(int input, int expected)
     {
-        testCPU.Add(input);
+        testCPU.AddX(input);
         int actual = testCPU.XReg;
 
         Assert.That(actual, Is.EqualTo(expected));

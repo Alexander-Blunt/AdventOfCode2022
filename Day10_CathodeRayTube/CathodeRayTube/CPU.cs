@@ -22,9 +22,14 @@ public class CPU
 
     public List<ICPUMonitor>? Monitors { get; private set; }
 
+    public CPU()
+    {
+        Monitors = new();
+    }
+
     public void UpdateMonitors()
     {
-        if (Monitors == null) return;
+        if (Monitors == null || Monitors.Count == 0) return;
         foreach (ICPUMonitor monitor in Monitors)
         {
             monitor.CPUUpdate(CurrentCycle, XReg);
@@ -41,9 +46,10 @@ public class CPU
         Monitors.Remove(monitor);
     }
 
-    public void Add(int v)
+    public void AddX(int v)
     {
-        CurrentCycle += 2;
+        CurrentCycle++;
+        CurrentCycle++;
         XReg += v;
     }
 
