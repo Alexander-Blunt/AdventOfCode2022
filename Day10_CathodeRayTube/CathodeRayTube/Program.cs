@@ -1,10 +1,12 @@
-﻿namespace CathodeRayTube;
+﻿using AOCSharedMethods;
+
+namespace CathodeRayTube;
 
 public class Program
 {
     static void Main(string[] args)
     {
-        string fileLocation = GetInputFilePath(@"\CathodeRayTube", "Day10Input.txt");
+        string fileLocation = InputProcessing.GetInputFilePath(@"\CathodeRayTube", "Day10Input.txt");
 
         string[] input = File.ReadAllLines(fileLocation);
 
@@ -23,18 +25,5 @@ public class Program
         }
 
         Console.WriteLine(signalStrengthMonitor.SignalStrength);
-    }
-
-    public static string GetInputFilePath(string parentDirName, string fileName)
-    {
-        string currentDirectory = Directory.GetCurrentDirectory();
-        int parentDirIndex = currentDirectory.LastIndexOf(parentDirName);
-        int lengthOfParentDirPath = parentDirName.Length + parentDirIndex;
-        string fullParentPath = currentDirectory.Substring(0, lengthOfParentDirPath);
-
-        string filePath = fullParentPath + @"\" + fileName;
-
-        if (File.Exists(filePath)) return filePath;
-        else throw new FileNotFoundException();
     }
 }

@@ -7,8 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\AOCSharedMethods\AOCSharedMethods.csproj" />
-	</ItemGroup>
-	
+  <ItemGroup>
+    <ProjectReference Include="..\..\AOCSharedMethods\AOCSharedMethods.csproj" />
+  </ItemGroup>
+
 </Project>
