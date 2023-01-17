@@ -8,22 +8,14 @@ namespace CathodeRayTube;
 
 public class CPU
 {
-    private int _currentCycle;
-    public int CurrentCycle
-    {
-        get { return _currentCycle; }
-        private set
-        {
-            _currentCycle = value;
-            UpdateMonitors();
-        }
-    }
+    public int CurrentCycle { get; private set; }
     public int XReg { get; private set; } = 1;
 
     public List<ICPUMonitor>? Monitors { get; private set; }
 
     public CPU()
     {
+        CurrentCycle = 0;
         Monitors = new();
     }
 
@@ -48,13 +40,14 @@ public class CPU
 
     public void AddX(int v)
     {
-        CurrentCycle++;
-        CurrentCycle++;
+        Noop();
+        Noop();
         XReg += v;
     }
 
     public void Noop()
     {
         CurrentCycle++;
+        UpdateMonitors();
     }
 }

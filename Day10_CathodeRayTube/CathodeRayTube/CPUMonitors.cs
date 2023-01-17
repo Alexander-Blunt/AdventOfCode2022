@@ -20,3 +20,20 @@ public class SignalStrengthMonitor : ICPUMonitor
         if ((cycle - 20) % 40 == 0) SignalStrength += cycle * xReg;
     }
 }
+
+public class CRT : ICPUMonitor
+{
+    public string[] Screen { get; private set; }
+
+    public CRT()
+    {
+        Screen = new string[6];
+    }
+    public void CPUUpdate(int cycle, int xReg)
+    {
+        int hPos = (cycle - 1) % 40;
+        int vPos = (cycle - 1) / 40;
+        if (hPos >= xReg - 1 && hPos <= xReg + 1) Screen[vPos] += '#';
+        else Screen[vPos] += '.';
+    }
+}

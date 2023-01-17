@@ -13,6 +13,8 @@ public class Program
         CPU cPU = new();
         SignalStrengthMonitor signalStrengthMonitor = new();
         cPU.ConnectMonitor(signalStrengthMonitor);
+        CRT cRT = new();
+        cPU.ConnectMonitor(cRT);
 
         foreach (string line in input)
         {
@@ -24,6 +26,11 @@ public class Program
             }
         }
 
-        Console.WriteLine(signalStrengthMonitor.SignalStrength);
+        Console.WriteLine($"Signal Strength = {signalStrengthMonitor.SignalStrength}");
+        
+        foreach (string line in cRT.Screen)
+        {
+            Console.WriteLine(line);
+        }
     }
 }
