@@ -21,7 +21,7 @@ public class GivenAMonkey
     }
 
     [Test]
-    public void GivenAMonkeyWithAnItemThatWillTestTrue_WhenTheMonkeyTakesATurn_ThenTrueReceiverReceivesItem()
+    public void WithAnItemThatWillTestTrue_WhenTheMonkeyTakesATurn_ThenTrueReceiverReceivesItem()
     {
         _sut.Items = new Queue<int>(new int[] { 79 });
         Queue<int> expected = new(new int[] { 2080 });
@@ -31,7 +31,7 @@ public class GivenAMonkey
     }
 
     [Test]
-    public void GivenAMonkeyWithAnItemThatWillTestFalse_WhenTheMonkeyTakesATurn_ThenFalseReceiverReceivesItem()
+    public void WithAnItemThatWillTestFalse_WhenTheMonkeyTakesATurn_ThenFalseReceiverReceivesItem()
     {
         _sut.Items = new Queue<int>(new int[] { 60 });
         Queue<int> expected = new(new int[] { 1200 });
