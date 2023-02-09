@@ -25,6 +25,13 @@ public class MonkeyDeserialiser
                 throw new ArgumentException("Operator must be + or *");
         }
     }
+
+    public Func<int, bool> DeserialiseTest(string opString)
+    {
+        string divisorString = opString.Split(" ").Last();
+        int divisor = int.Parse(divisorString);
+        return i => i % divisor == 0;
+    }
 }
 
 public static class OperationBuilder
