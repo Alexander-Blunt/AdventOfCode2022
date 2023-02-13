@@ -3,8 +3,14 @@ namespace Day11Tests;
 public class GivenAMonkey
 {
     [TestCaseSource(nameof(OperateCases))]
-    public void WhenOperateOnIsCalled_CorrectOperationIsPerformed(Monkey sut, int input, int expected)
+    public void WhenOperateOnIsCalled_CorrectOperationIsPerformed(string operation, int input, int expected)
     {
+        Monkey sut = new Monkey(
+                new Queue<int>(),
+                operation,
+                "divisible by 5",
+                1,
+                2);
         int actual = sut.OperateOn(input);
 
         Assert.That(actual, Is.EqualTo(expected));
@@ -12,36 +18,9 @@ public class GivenAMonkey
 
     public static object[] OperateCases =
     {
-        new object[]
-        {
-            new Monkey(
-                new Queue<int>(),
-                "new = old * old",
-                "divisible by 5",
-                1,
-                2),
-            5, 25
-        },
-        new object[]
-        {
-            new Monkey(
-                null,
-                "new = old + 5",
-                "divisible by 5",
-                0,
-                0),
-            5, 10
-        },
-        new object[]
-        {
-            new Monkey(
-                null,
-                "new = old * 5",
-                "divisible by 5",
-                0,
-                0),
-            2, 10
-        }
+        new object[] { "new = old * old", 5, 25 },
+        new object[] { "new = old + 5", 5, 10 },
+        new object[] { "new = old * 5", 5, 25 },
     };
 
     [TestCase(10, true)]
