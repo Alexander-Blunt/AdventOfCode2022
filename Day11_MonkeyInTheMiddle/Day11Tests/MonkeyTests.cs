@@ -2,41 +2,55 @@ namespace Day11Tests;
 
 public class GivenAMonkey
 {
-    Monkey _sut;
-    Monkey _trueReceiver;
-    Monkey _falseReceiver;
-    [SetUp]
-    public void Setup()
+    [TestCaseSource(nameof(OperateCases))]
+    public void WhenOperateOnIsCalled_CorrectOperationIsPerformed(Monkey sut, int input, int expected)
     {
-        _trueReceiver = new Monkey(new Queue<int>(), null, null, null, null);
-        _falseReceiver = new Monkey(new Queue<int>(), null, null, null, null);
+        int actual = sut.OperateOn(input);
 
-        _sut = new Monkey(
-            new Queue<int>(),
-            wl => wl * wl,
-            wl => wl % 13 == 0,
-            _trueReceiver,
-            _falseReceiver
-            );
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
-    [Test]
-    public void WithAnItemThatWillTestTrue_WhenTheMonkeyTakesATurn_ThenTrueReceiverReceivesItem()
+    public static object[] OperateCases =
     {
-        _sut.Items = new Queue<int>(new int[] { 79 });
-        Queue<int> expected = new(new int[] { 2080 });
-        _sut.TakeTurn();
+        new object[]
+        {
+            new Monkey(
+                new Queue<int>(),
+                "new = old * old",
+                "divisible by 5",
+                1,
+                2),
+            5, 25
+        },
+        new object[]
+        {
+            new Monkey(
+                null,
+                "new = old + 5",
+                "divisible by 5",
+                0,
+                0),
+            5, 10
+        },
+        new object[]
+        {
+            new Monkey(
+                null,
+                "new = old * 5",
+                "divisible by 5",
+                0,
+                0),
+            2, 10
+        }
+    };
 
-        Assert.That(_trueReceiver.Items, Is.EqualTo(expected));
-    }
-
-    [Test]
-    public void WithAnItemThatWillTestFalse_WhenTheMonkeyTakesATurn_ThenFalseReceiverReceivesItem()
+    [TestCase(10, true)]
+    [TestCase(7, false)]
+    public void WhenTestIsCalled_CorrectOperationIsPerformed(int input, bool expected)
     {
-        _sut.Items = new Queue<int>(new int[] { 60 });
-        Queue<int> expected = new(new int[] { 1200 });
-        _sut.TakeTurn();
+        Monkey sut = new Monkey(new Queue<int>(), "new = old * old", "divisible by 5", 0, 0);
+        bool actual = sut.Test(input);
 
-        Assert.That(_falseReceiver.Items, Is.EqualTo(expected));
+        Assert.That(actual, Is.EqualTo(expected));
     }
 }

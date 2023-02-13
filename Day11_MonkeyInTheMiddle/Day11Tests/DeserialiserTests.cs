@@ -1,4 +1,8 @@
-﻿namespace Day11Tests;
+﻿using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
+using System.Security.Cryptography;
+
+namespace Day11Tests;
 
 public class ADeserialiser
 {
@@ -19,37 +23,30 @@ public class ADeserialiser
         Assert.That(result, Is.EqualTo(expected));
     }
 
-    [TestCaseSource(nameof(OperationCases))]
-    public void DeserialisesOperation(string opString, Func<int, int> expected)
+    [TestCaseSource(nameof(MonkeyCases))]
+    public void DeserialisesAMonkey(string monkeyString, Monkey expected)
     {
-        Func<int, int> actual = _sut.DeserialiseOperation(opString);
-        int actualResult = actual(5);
-        int expectedResult = expected(5);
+        Monkey actual = _sut.DeserialiseMonkey(monkeyString);
 
-        Assert.That(actualResult, Is.EqualTo(expectedResult));
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
-    public static object[] OperationCases =
+    public static object[] MonkeyCases =
     {
-        new object[] { "new = old + 5", new Func<int, int>(wl => wl + 5) },
-        new object[] { "new = old + old", new Func<int, int>(wl => wl + wl) },
-        new object[] { "new = old * 5", new Func<int, int>(wl => wl * 5) },
-        new object[] { "new = old * old", new Func<int, int>(wl => wl * wl) }
-    };
+        new object[] {
+            "0:\r\n" +
+            "  Starting items: 79, 98\r\n" +
+            "  Operation: new = old * 19\r\n" +
+            "  Test: divisible by 23\r\n" +
+            "    If true: throw to monkey 2\r\n" +
+            "    If false: throw to monkey 3" ,
 
-    [TestCaseSource(nameof(TestCases))]
-    public void DeserialisesTest(string opString, Func<int, bool> expected)
-    {
-        Func<int, bool> actual = _sut.DeserialiseTest(opString);
-        bool expectedResult = expected(23);
-        bool actualResult = actual(23);
-
-        Assert.That(actualResult, Is.EqualTo(expectedResult));
-    }
-
-    public static object[] TestCases =
-    {
-        new object[] { "divisible by 23", new Func<int, bool>(i => i % 23 == 0) },
-        new object[] { "divisible by 13", new Func<int, bool>(i => i % 13 == 0) },
+            new Monkey(
+            new Queue<int>(new int[] { 79, 98 }),
+            "new = old * 19",
+            "divisible by 23",
+            2,
+            3
+            )}
     };
 }
