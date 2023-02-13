@@ -13,7 +13,7 @@ public class MonkeyDeserialiser
 
     public Monkey DeserialiseMonkey(string monkeyString)
     {
-        string[] propertyStrings = monkeyString.Split(new string[] { ":", "\r\n" }, StringSplitOptions.TrimEntries);
+        string[] propertyStrings = monkeyString.Split(new string[] { ":", "\n" }, StringSplitOptions.TrimEntries);
         var items = DeserialiseStartingItems(propertyStrings[3]);
         var operation = propertyStrings[5];
         var test = propertyStrings[7];

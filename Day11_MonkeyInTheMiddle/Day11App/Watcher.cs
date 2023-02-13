@@ -32,9 +32,9 @@ public class Watcher
         }
     }
 
-    public void ObserveRounds(int numTurns)
+    public void ObserveRounds(int numRounds)
     {
-        for (int i = 0; i < numTurns; i++)
+        for (int i = 0; i < numRounds; i++)
         {
             ObserveRound();
         }
