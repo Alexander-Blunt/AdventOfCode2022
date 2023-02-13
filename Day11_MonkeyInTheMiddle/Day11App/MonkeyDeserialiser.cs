@@ -4,8 +4,6 @@ namespace Day11App;
 
 public class MonkeyDeserialiser
 {
-
-
     public Queue<int> DeserialiseStartingItems(string itemsLine)
     {
         int[] itemArray = itemsLine.Split(", ").Select(s => int.Parse(s)).ToArray<int>();

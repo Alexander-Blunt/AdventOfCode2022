@@ -13,6 +13,8 @@ public class Monkey : IEquatable<Monkey?>
     public MonkeyTest TestOp { get; }
     public int TrueReceiver { get; }
     public int FalseReceiver { get; }
+    public Watcher Watcher { get; internal set; }
+    public int Business { get; internal set; }
 
     public Monkey(Queue<int> startingItems, string opString, string testString, int trueReceiver, int falseReceiver)
     {
@@ -28,23 +30,27 @@ public class Monkey : IEquatable<Monkey?>
         while (Items.Count > 0)
         {
             int worryLevel = Items.Dequeue();
-           worryLevel = OperateOn(worryLevel);
+            worryLevel = Inspect(worryLevel);
             worryLevel /= 3;
             if (Test(worryLevel)) Throw(TrueReceiver, worryLevel);
             else Throw(FalseReceiver, worryLevel);
         }
     }
 
-    public int OperateOn(int worryLevel) => Operation.OperateOn(worryLevel);
+    public int Inspect(int worryLevel)
+    {
+        Business++;
+        return Operation.OperateOn(worryLevel);
+    }
 
     public bool Test(int worryLevel) => TestOp.Test(worryLevel);
 
     private void Throw(int target, int worryLevel)
     {
-
+        Watcher.ProcessThrow(target, worryLevel);
     }
 
-    private void Catch(int worryLevel) => Items.Enqueue(worryLevel);
+    public void Catch(int worryLevel) => Items.Enqueue(worryLevel);
 
     public override string ToString()
     {
@@ -82,6 +88,11 @@ public class Monkey : IEquatable<Monkey?>
     public override int GetHashCode()
     {
         return HashCode.Combine(Items, Operation, TestOp, TrueReceiver, FalseReceiver);
+    }
+
+    public void AddWatcher(Watcher watcher)
+    {
+        Watcher = watcher;
     }
 
     public static bool operator ==(Monkey? left, Monkey? right)

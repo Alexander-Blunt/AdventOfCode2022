@@ -11,7 +11,7 @@ public class GivenAMonkey
                 "divisible by 5",
                 1,
                 2);
-        int actual = sut.OperateOn(input);
+        int actual = sut.Inspect(input);
 
         Assert.That(actual, Is.EqualTo(expected));
     }
