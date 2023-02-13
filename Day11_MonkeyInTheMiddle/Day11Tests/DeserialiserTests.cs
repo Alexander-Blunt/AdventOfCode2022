@@ -17,8 +17,8 @@ public class ADeserialiser
     [Test]
     public void DeserialisesStartingItems()
     {
-        Queue<int> result = _sut.DeserialiseStartingItems("56, 56, 92, 65, 71, 61, 79");
-        Queue<int> expected = new(new int[] { 56, 56, 92, 65, 71, 61, 79 });
+        Queue<long> result = _sut.DeserialiseStartingItems("56, 56, 92, 65, 71, 61, 79");
+        Queue<long> expected = new(new long[] { 56, 56, 92, 65, 71, 61, 79 });
 
         Assert.That(result, Is.EqualTo(expected));
     }
@@ -42,7 +42,7 @@ public class ADeserialiser
             "    If false: throw to monkey 3" ,
 
             new Monkey(
-            new Queue<int>(new int[] { 79, 98 }),
+            new Queue<long>(new long[] { 79, 98 }),
             "new = old * 19",
             "divisible by 23",
             2,

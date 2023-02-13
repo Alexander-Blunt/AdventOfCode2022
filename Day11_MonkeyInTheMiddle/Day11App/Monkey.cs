@@ -8,7 +8,7 @@ namespace Day11App;
 
 public class Monkey : IEquatable<Monkey?>
 {
-    public Queue<int> Items { get; set; }
+    public Queue<long> Items { get; set; }
     public MonkeyOp Operation { get; }
     public MonkeyTest TestOp { get; }
     public int TrueReceiver { get; }
@@ -16,7 +16,7 @@ public class Monkey : IEquatable<Monkey?>
     public Watcher Watcher { get; internal set; }
     public int Business { get; internal set; }
 
-    public Monkey(Queue<int> startingItems, string opString, string testString, int trueReceiver, int falseReceiver)
+    public Monkey(Queue<long> startingItems, string opString, string testString, int trueReceiver, int falseReceiver)
     {
         Items = startingItems;
         Operation = new MonkeyOp(opString);
@@ -29,7 +29,7 @@ public class Monkey : IEquatable<Monkey?>
     {
         while (Items.Count > 0)
         {
-            int worryLevel = Items.Dequeue();
+            long worryLevel = Items.Dequeue();
             worryLevel = Inspect(worryLevel);
             worryLevel /= 3;
             if (Test(worryLevel)) Throw(TrueReceiver, worryLevel);
@@ -37,20 +37,20 @@ public class Monkey : IEquatable<Monkey?>
         }
     }
 
-    public int Inspect(int worryLevel)
+    public long Inspect(long worryLevel)
     {
         Business++;
         return Operation.OperateOn(worryLevel);
     }
 
-    public bool Test(int worryLevel) => TestOp.Test(worryLevel);
+    public bool Test(long worryLevel) => TestOp.Test(worryLevel);
 
-    private void Throw(int target, int worryLevel)
+    private void Throw(int target, long worryLevel)
     {
         Watcher.ProcessThrow(target, worryLevel);
     }
 
-    public void Catch(int worryLevel) => Items.Enqueue(worryLevel);
+    public void Catch(long worryLevel) => Items.Enqueue(worryLevel);
 
     public override string ToString()
     {
@@ -120,7 +120,7 @@ public class Monkey : IEquatable<Monkey?>
 
 public class MonkeyOp : IEquatable<MonkeyOp?>
 {
-    public Func<int, int> Operation { get; }
+    public Func<long, long> Operation { get; }
     public string OpString { get; }
 
     public MonkeyOp(string opString)
@@ -129,7 +129,7 @@ public class MonkeyOp : IEquatable<MonkeyOp?>
         Operation = ParseOperation(OpString);
     }
 
-    internal Func<int, int> ParseOperation(string opString)
+    internal Func<long, long> ParseOperation(string opString)
     {
         string[] opParts = opString.Split(' ');
         if (opParts.Length != 5) throw new ArgumentException("The function should be of the format new = old + x");
@@ -144,7 +144,7 @@ public class MonkeyOp : IEquatable<MonkeyOp?>
         }
     }
 
-    internal int OperateOn(int worryLevel)
+    internal long OperateOn(long worryLevel)
     {
         return Operation(worryLevel);
     }
@@ -172,17 +172,17 @@ public class MonkeyOp : IEquatable<MonkeyOp?>
 
     internal static class OperationBuilder
     {
-        internal static Func<int, int> Add(string other)
+        internal static Func<long, long> Add(string other)
         {
             if (other == "old") return i => i + i;
-            else if (int.TryParse(other, out int result)) return i => i + result;
+            else if (long.TryParse(other, out long result)) return i => i + result;
             else throw new ArgumentException(@"Argument must be a string representation of an integer or 'old'");
         }
 
-        internal static Func<int, int> Mul(string other)
+        internal static Func<long, long> Mul(string other)
         {
             if (other == "old") return i => i * i;
-            else if (int.TryParse(other, out int result)) return i => i * result;
+            else if (long.TryParse(other, out long result)) return i => i * result;
             else throw new ArgumentException(@"Argument must be a string representation of an integer or 'old'");
         }
     }
@@ -212,7 +212,7 @@ public class MonkeyOp : IEquatable<MonkeyOp?>
 
 public class MonkeyTest : IEquatable<MonkeyTest?>
 {
-    public Func<int, bool> TestOp { get; }
+    public Func<long, bool> TestOp { get; }
     public string TestString { get; }
 
     public MonkeyTest(string testString)
@@ -226,7 +226,7 @@ public class MonkeyTest : IEquatable<MonkeyTest?>
         TestOp = i => i % divisor == 0;
     }
 
-    internal bool Test(int worryLevel)
+    internal bool Test(long worryLevel)
     {
         return TestOp(worryLevel);
     }

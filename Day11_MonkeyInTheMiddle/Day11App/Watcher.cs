@@ -40,7 +40,7 @@ public class Watcher
         }
     }
 
-    internal void ProcessThrow(int target, int worryLevel)
+    internal void ProcessThrow(int target, long worryLevel)
     {
         MonkeyList[target].Catch(worryLevel);
     }

@@ -3,15 +3,15 @@ namespace Day11Tests;
 public class GivenAMonkey
 {
     [TestCaseSource(nameof(OperateCases))]
-    public void WhenOperateOnIsCalled_CorrectOperationIsPerformed(string operation, int input, int expected)
+    public void WhenOperateOnIsCalled_CorrectOperationIsPerformed(string operation, long input, long expected)
     {
         Monkey sut = new Monkey(
-                new Queue<int>(),
+                new Queue<long>(),
                 operation,
                 "divisible by 5",
                 1,
                 2);
-        int actual = sut.Inspect(input);
+        long actual = sut.Inspect(input);
 
         Assert.That(actual, Is.EqualTo(expected));
     }
@@ -27,7 +27,7 @@ public class GivenAMonkey
     [TestCase(7, false)]
     public void WhenTestIsCalled_CorrectOperationIsPerformed(int input, bool expected)
     {
-        Monkey sut = new Monkey(new Queue<int>(), "new = old * old", "divisible by 5", 0, 0);
+        Monkey sut = new Monkey(new Queue<long>(), "new = old * old", "divisible by 5", 0, 0);
         bool actual = sut.Test(input);
 
         Assert.That(actual, Is.EqualTo(expected));

@@ -4,11 +4,11 @@ namespace Day11App;
 
 public class MonkeyDeserialiser
 {
-    public Queue<int> DeserialiseStartingItems(string itemsLine)
+    public Queue<long> DeserialiseStartingItems(string itemsLine)
     {
-        int[] itemArray = itemsLine.Split(", ").Select(s => int.Parse(s)).ToArray<int>();
+        long[] itemArray = itemsLine.Split(", ").Select(s => long.Parse(s)).ToArray();
 
-        return new Queue<int>(itemArray);
+        return new Queue<long>(itemArray);
     }
 
     public Monkey DeserialiseMonkey(string monkeyString)
