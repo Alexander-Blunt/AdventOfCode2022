@@ -46,7 +46,7 @@ public class Program
             watcher.AddMonkeyFromString(monkeyString);
         }
 
-        // Perform 10000 rounds with overflow checking and collect results
+        // Perform 10000 rounds with overflow mitigation and collect results
         watcher.ObserveRounds(10000, false);
         monkeyBusiness = watcher.GetMonkeyBusiness();
         businessList = monkeyBusiness.ToList();
