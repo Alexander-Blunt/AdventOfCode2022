@@ -44,7 +44,7 @@ public class ADeserialiser
             new Monkey(
             new Queue<long>(new long[] { 79, 98 }),
             "new = old * 19",
-            "divisible by 23",
+            23,
             2,
             3
             )}

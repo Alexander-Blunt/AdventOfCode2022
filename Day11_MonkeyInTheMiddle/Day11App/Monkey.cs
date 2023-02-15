@@ -10,17 +10,17 @@ public class Monkey : IEquatable<Monkey?>
 {
     public Queue<long> Items { get; set; }
     public MonkeyOp Operation { get; }
-    public MonkeyTest TestOp { get; }
+    public int TestDivisor { get; }
     public int TrueReceiver { get; }
     public int FalseReceiver { get; }
     public Watcher Watcher { get; internal set; }
     public int Business { get; internal set; }
 
-    public Monkey(Queue<long> startingItems, string opString, string testString, int trueReceiver, int falseReceiver)
+    public Monkey(Queue<long> startingItems, string opString, int testDivisor, int trueReceiver, int falseReceiver)
     {
         Items = startingItems;
         Operation = new MonkeyOp(opString);
-        TestOp = new MonkeyTest(testString);
+        TestDivisor = testDivisor;
         TrueReceiver = trueReceiver;
         FalseReceiver = falseReceiver;
     }
@@ -43,7 +43,7 @@ public class Monkey : IEquatable<Monkey?>
         return Operation.OperateOn(worryLevel);
     }
 
-    public bool Test(long worryLevel) => TestOp.Test(worryLevel);
+    public bool Test(long worryLevel) => worryLevel % TestDivisor == 0;
 
     private void Throw(int target, long worryLevel)
     {
@@ -64,7 +64,7 @@ public class Monkey : IEquatable<Monkey?>
         sb.Remove(sb.Length - 3, 2);
         sb.AppendLine();
         sb.AppendLine($"Operation: {Operation}");
-        sb.AppendLine($"Test: {TestOp}");
+        sb.AppendLine($"Test: {TestDivisor}");
         sb.AppendLine($"True receiver: {TrueReceiver}");
         sb.AppendLine($"False receiver: {FalseReceiver}");
         return sb.ToString();
@@ -80,14 +80,14 @@ public class Monkey : IEquatable<Monkey?>
         return other is not null &&
                Items.SequenceEqual(other.Items) &&
                Operation == other.Operation &&
-               TestOp == other.TestOp &&
+               TestDivisor == other.TestDivisor &&
                TrueReceiver == other.TrueReceiver &&
                FalseReceiver == other.FalseReceiver;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Items, Operation, TestOp, TrueReceiver, FalseReceiver);
+        return HashCode.Combine(Items, Operation, TestDivisor, TrueReceiver, FalseReceiver);
     }
 
     public void AddWatcher(Watcher watcher)
@@ -209,69 +209,3 @@ public class MonkeyOp : IEquatable<MonkeyOp?>
         return !(left == right);
     }
 }
-
-public class MonkeyTest : IEquatable<MonkeyTest?>
-{
-    public Func<long, bool> TestOp { get; }
-    public string TestString { get; }
-
-    public MonkeyTest(string testString)
-    {
-        if (!testString.Contains("divisible by ") ||
-            !int.TryParse(testString.Split(' ').Last(), out int divisor))
-        {
-            throw new ArgumentException("Test must be in format 'divisible by x where x is an integer");
-        }
-        TestString = testString;
-        TestOp = i => i % divisor == 0;
-    }
-
-    internal bool Test(long worryLevel)
-    {
-        return TestOp(worryLevel);
-    }
-
-    public override string ToString()
-    {
-        return TestString;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return Equals(obj as MonkeyTest);
-    }
-
-    public bool Equals(MonkeyTest? other)
-    {
-        return other is not null &&
-               TestString == other.TestString;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(TestString);
-    }
-
-    public static bool operator ==(MonkeyTest? left, MonkeyTest? right)
-    {
-        {
-            if (left is null)
-            {
-                if (right is null)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-            // Equals handles case of null on right side.
-            return left.Equals(right);
-        };
-    }
-
-    public static bool operator !=(MonkeyTest? left, MonkeyTest? right)
-    {
-        return !(left == right);
-    }
-}
-

@@ -8,7 +8,7 @@ public class GivenAMonkey
         Monkey sut = new Monkey(
                 new Queue<long>(),
                 operation,
-                "divisible by 5",
+                5,
                 1,
                 2);
         long actual = sut.Inspect(input);
@@ -27,7 +27,7 @@ public class GivenAMonkey
     [TestCase(7, false)]
     public void WhenTestIsCalled_CorrectOperationIsPerformed(int input, bool expected)
     {
-        Monkey sut = new Monkey(new Queue<long>(), "new = old * old", "divisible by 5", 0, 0);
+        Monkey sut = new Monkey(new Queue<long>(), "new = old * old", 5, 0, 0);
         bool actual = sut.Test(input);
 
         Assert.That(actual, Is.EqualTo(expected));
