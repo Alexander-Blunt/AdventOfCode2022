@@ -32,8 +32,8 @@ public class WatcherTests
 
     Watcher _sut;
 
-    [OneTimeSetUp]
-    public void OneTimeSetUp()
+    [SetUp]
+    public void SetUp()
     {
         _sut = new Watcher(new MonkeyDeserialiser());
         foreach (string monkeyString in monkeyStrings)
@@ -48,6 +48,16 @@ public class WatcherTests
         _sut.ObserveRounds(20);
         int[] actual = _sut.GetMonkeyBusiness();
         int[] expected = new int[] { 101, 95, 7, 105 };
+
+        Assert.That(actual, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void GivenAWatcherAndAMonkeyList_WhenTheMonkeysTake10000RoundsWithoutRelief_ThenTheyHaveCorrectActivityScores()
+    {
+        _sut.ObserveRounds(10000, false);
+        int[] actual = _sut.GetMonkeyBusiness();
+        int[] expected = new int[] { 52166, 47830, 1938, 52013 };
 
         Assert.That(actual, Is.EqualTo(expected));
     }

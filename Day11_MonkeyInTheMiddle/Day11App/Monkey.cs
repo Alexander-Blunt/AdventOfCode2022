@@ -25,7 +25,7 @@ public class Monkey : IEquatable<Monkey?>
         FalseReceiver = falseReceiver;
     }
 
-    public void TakeTurn()
+    public void TakeDiv3Turn()
     {
         while (Items.Count > 0)
         {
@@ -93,6 +93,18 @@ public class Monkey : IEquatable<Monkey?>
     public void AddWatcher(Watcher watcher)
     {
         Watcher = watcher;
+    }
+
+    internal void TakeTurnWithOverflowCheck(int monkeyDivisorProduct)
+    {
+        while (Items.Count > 0)
+        {
+            long worryLevel = Items.Dequeue();
+            worryLevel = Inspect(worryLevel);
+            worryLevel %= monkeyDivisorProduct;
+            if (Test(worryLevel)) Throw(TrueReceiver, worryLevel);
+            else Throw(FalseReceiver, worryLevel);
+        }
     }
 
     public static bool operator ==(Monkey? left, Monkey? right)
@@ -174,15 +186,15 @@ public class MonkeyOp : IEquatable<MonkeyOp?>
     {
         internal static Func<long, long> Add(string other)
         {
-            if (other == "old") return i => i + i;
-            else if (long.TryParse(other, out long result)) return i => i + result;
+            if (other == "old") return checked(i => i + i);
+            else if (long.TryParse(other, out long result)) return checked(i => i + result);
             else throw new ArgumentException(@"Argument must be a string representation of an integer or 'old'");
         }
 
         internal static Func<long, long> Mul(string other)
         {
-            if (other == "old") return i => i * i;
-            else if (long.TryParse(other, out long result)) return i => i * result;
+            if (other == "old") return checked(i => i * i);
+            else if (long.TryParse(other, out long result)) return checked(i => i * result);
             else throw new ArgumentException(@"Argument must be a string representation of an integer or 'old'");
         }
     }
