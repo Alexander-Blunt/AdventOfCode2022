@@ -96,22 +96,15 @@ public class RouteFinder
         return nextSet.ToArray();
     }
 
-    public int GetNumberOfStepsFromSToF()
+    public int GetFewestStepsBetweenPoints(Point2D startPoint, Point2D endPoint)
     {
         // reset path
         PathedPoints = new Dictionary<Point2D, int>();
-        int mapWidth = HeightMap[0].Length;
-        int mapHeight = HeightMap.Length;
-        Point2D startPoint = FindStartPoint();
-        Point2D endPoint = FindEndPoint();
-        Point2D[] currentSet = { startPoint };
-        int[,] graph = new int[mapWidth, mapHeight];
 
-        // Dictionary to represent all points for which a path has been found and their distance from the start point
-        Dictionary<Point2D, int> pathedPoints = new();
+        Point2D[] currentSet = { startPoint };
+
         int stepsFromStart = 0;
         PathedPoints.Add(startPoint, stepsFromStart);
-
 
         while (!currentSet.Contains(endPoint))
         {
@@ -121,11 +114,39 @@ public class RouteFinder
         return stepsFromStart;
     }
 
+    public int GetNumberOfStepsFromSToF()
+    {
+        Point2D startPoint = FindStartPoint();
+        Point2D endPoint = FindEndPoint();
+
+        return GetFewestStepsBetweenPoints(startPoint, endPoint);
+    }
+
+    private Point2D[] GetStartPoints(char height)
+    {
+        var startPoints = new List<Point2D>();
+        for (int i = 0; i < HeightMap[0].Length; i++)
+        {
+            for (int j = 0; j < HeightMap.Length; j++)
+            {
+                if (HeightMap[j][i] == height) startPoints.Add(new Point2D(i, j));
+            }
+        }
+        if (startPoints.Count == 0) throw new ArgumentException($"No points of height {height} found");
+        return startPoints.ToArray();
+    }
+
     public int GetFewestNumberOfStepsToFinishFromHeight(char height)
     {
-        // reset path
-        PathedPoints = new Dictionary<Point2D, int>();
-        var startPoints = new List<Point2D>();
-        for (int i = 0; i < )
+        Point2D[] startPoints = GetStartPoints(height);
+        Point2D endPoint = FindEndPoint();
+        int fewestOverallSteps = int.MaxValue;
+        foreach (var startPoint in startPoints)
+        {
+            int fewestSteps = GetFewestStepsBetweenPoints(startPoint, endPoint);
+            if (fewestSteps < fewestOverallSteps) fewestOverallSteps = fewestSteps;
+        }
+
+        return fewestOverallSteps;
     }
 }
