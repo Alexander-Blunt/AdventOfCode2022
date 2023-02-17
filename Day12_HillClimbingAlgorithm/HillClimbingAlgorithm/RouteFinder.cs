@@ -1,12 +1,17 @@
-﻿namespace HillClimbingAlgorithm;
+﻿using System.Collections.Generic;
+using System;
+
+namespace HillClimbingAlgorithm;
 
 public class RouteFinder
 {
     public string[] HeightMap { get; private set; }
+    public Dictionary<Point2D, int> PathedPoints { get; private set; }
 
     public RouteFinder(string[] startingMap)
     {
         HeightMap = startingMap;
+        PathedPoints = new Dictionary<Point2D, int>();
     }
 
     private Point2D FindStartPoint()
@@ -32,60 +37,85 @@ public class RouteFinder
     public int GetHeightOfPoint(Point2D point)
     {
         char heightChar = HeightMap[point.Y][point.X];
+        if (heightChar == 'S') return 1;
+        if (heightChar == 'E') return 26;
         return (int)heightChar - 96;
     }
 
-    public int[,] CreatePath()
+    private Point2D[] FindNeighboursInSet(Point2D[] currentSet, int stepsFromStart)
+    {
+        List<Point2D> nextSet = new();
+        foreach (var point in currentSet)
+        {
+            int currentHeight = GetHeightOfPoint(point);
+            Point2D nextPoint;
+            // check right
+            if (point.X < HeightMap[0].Length - 1)
+            {
+                nextPoint = new Point2D(point.X + 1, point.Y);
+                if (currentHeight - GetHeightOfPoint(nextPoint) > -2 && !PathedPoints.ContainsKey(nextPoint))
+                {
+                    PathedPoints.Add(nextPoint, stepsFromStart);
+                    nextSet.Add(nextPoint);
+                }
+            }
+
+            // check down
+            if (point.Y < HeightMap.Length - 1)
+            {
+                nextPoint = new Point2D(point.X, point.Y + 1);
+                if (currentHeight - GetHeightOfPoint(nextPoint) > -2 && !PathedPoints.ContainsKey(nextPoint))
+                {
+                    PathedPoints.Add(nextPoint, stepsFromStart);
+                    nextSet.Add(nextPoint);
+                }
+            }
+
+            // check left
+            if (point.X > 0)
+            {
+                nextPoint = new Point2D(point.X - 1, point.Y);
+                if (currentHeight - GetHeightOfPoint(nextPoint) > -2 && !PathedPoints.ContainsKey(nextPoint))
+                {
+                    PathedPoints.Add(nextPoint, stepsFromStart);
+                    nextSet.Add(nextPoint);
+                }
+            }
+
+            // check up
+            if (point.Y > 0)
+            {
+                nextPoint = new Point2D(point.X, point.Y - 1);
+                if (currentHeight - GetHeightOfPoint(nextPoint) > -2 && !PathedPoints.ContainsKey(nextPoint))
+                {
+                    PathedPoints.Add(nextPoint, stepsFromStart);
+                    nextSet.Add(nextPoint);
+                }
+            }
+        }
+        return nextSet.ToArray();
+    }
+
+    public int GetNumberOfStepsToFinish()
     {
         int mapWidth = HeightMap[0].Length;
         int mapHeight = HeightMap.Length;
         Point2D startPoint = FindStartPoint();
         Point2D endPoint = FindEndPoint();
-        Point2D currentPoint = startPoint;
+        Point2D[] currentSet = { startPoint };
         int[,] graph = new int[mapWidth, mapHeight];
 
         // Dictionary to represent all points for which a path has been found and their distance from the start point
         Dictionary<Point2D, int> pathedPoints = new();
-        pathedPoints.Add(currentPoint, 0);
+        int stepsFromStart = 0;
+        PathedPoints.Add(startPoint, stepsFromStart);
 
-        while (!pathedPoints.ContainsKey(endPoint))
+
+        while (!currentSet.Contains(endPoint))
         {
-            int currentHeight = GetHeightOfPoint(currentPoint);
-            Point2D nextPoint;
-            // check right
-            if (currentPoint.X < mapWidth)
-            {
-                nextPoint = new Point2D(currentPoint.X + 1, currentPoint.Y);
-                if (currentHeight - GetHeightOfPoint(nextPoint) > -2) pathedPoints.Add(nextPoint, distanceFromStart);
-            }
-
-            // check down
-            if (currentPoint.Y < mapHeight)
-            {
-                nextPoint = new Point2D(currentPoint.X, currentPoint.Y + 1);
-                if (currentHeight - GetHeightOfPoint(nextPoint) > -2) pathedPoints.Add(nextPoint, distanceFromStart);
-            }
-
-            // check left
-            if (currentPoint.X >= 0)
-            {
-                nextPoint = new Point2D(currentPoint.X - 1, currentPoint.Y);
-                if (currentHeight - GetHeightOfPoint(nextPoint) > -2) pathedPoints.Add(nextPoint, distanceFromStart);
-            }
-
-            // check up
-            if (currentPoint.Y >= 0)
-            {
-                nextPoint = new Point2D(currentPoint.X, currentPoint.Y - 1);
-                if (currentHeight - GetHeightOfPoint(nextPoint) > -2) pathedPoints.Add(nextPoint, distanceFromStart);
-            }
-            currentPoint = pathedPoints[distanceFromStart];
+            stepsFromStart++;
+            currentSet = FindNeighboursInSet(currentSet, stepsFromStart);
         }
-        throw new NotImplementedException();
-    }
-
-    public int GetNumberOfSteps()
-    {
-        throw new NotImplementedException();
+        return stepsFromStart;
     }
 }

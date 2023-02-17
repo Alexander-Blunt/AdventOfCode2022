@@ -18,6 +18,11 @@ public struct Point2D : IEquatable<Point2D>
         this.Y = y;
     }
 
+    public override string ToString()
+    {
+        return $"[{X}, {Y}]";
+    }
+
     public override bool Equals(object? obj)
     {
         return obj is Point2D d && Equals(d);

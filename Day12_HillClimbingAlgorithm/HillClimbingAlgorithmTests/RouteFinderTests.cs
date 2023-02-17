@@ -26,30 +26,17 @@ public class RouteFinderTests
 
     public static object[] HeightTestSource =
     {
+        new object[] { new Point2D(0, 0), 1},
+        new object[] { new Point2D(5, 2), 26},
         new object[] { new Point2D(0, 1), 1},
         new object[] { new Point2D(4, 2), 26}
     };
 
     [Test]
-    public void CreateGraph_ReturnsCorrectGraph()
-    {
-        int[,] expected = {
-            { 0, 1, 2, 19, 18, 17, 16, 15 },
-            { 1, 2, 3, 20, 29, 28, 27, 14 },
-            { 2, 3, 4, 21, 30, 31, 26, 13 },
-            { 3, 4, 5, 22, 23, 24, 25, 12 },
-            { 4, 5, 6,  7,  8,  9, 10, 11 }
-        };
-        int[,] actual = _sut.CreatePath();
-
-        Assert.That(actual, Is.EqualTo(expected));
-    }
-
-    [Test]
-    public void GetNumberOfSteps_ReturnsCorrectNumberOfSteps()
+    public void GetNumberOfStepsToFinish_ReturnsCorrectNumberOfSteps()
     {
         int expected = 31;
-        int actual = _sut.GetNumberOfSteps();
+        int actual = _sut.GetNumberOfStepsToFinish();
 
         Assert.That(actual, Is.EqualTo(expected));
     }

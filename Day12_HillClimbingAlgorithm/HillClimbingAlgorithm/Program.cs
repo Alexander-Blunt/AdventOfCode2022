@@ -1,10 +1,11 @@
-﻿namespace HillClimbingAlgorithm
+﻿using AOCSharedMethods;
+
+namespace HillClimbingAlgorithm;
+
+internal class Program
 {
-    internal class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-        }
+        
     }
 }
