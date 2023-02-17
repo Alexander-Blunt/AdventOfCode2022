@@ -96,8 +96,10 @@ public class RouteFinder
         return nextSet.ToArray();
     }
 
-    public int GetNumberOfStepsToFinish()
+    public int GetNumberOfStepsFromSToF()
     {
+        // reset path
+        PathedPoints = new Dictionary<Point2D, int>();
         int mapWidth = HeightMap[0].Length;
         int mapHeight = HeightMap.Length;
         Point2D startPoint = FindStartPoint();
@@ -117,5 +119,13 @@ public class RouteFinder
             currentSet = FindNeighboursInSet(currentSet, stepsFromStart);
         }
         return stepsFromStart;
+    }
+
+    public int GetFewestNumberOfStepsToFinishFromHeight(char height)
+    {
+        // reset path
+        PathedPoints = new Dictionary<Point2D, int>();
+        var startPoints = new List<Point2D>();
+        for (int i = 0; i < )
     }
 }
