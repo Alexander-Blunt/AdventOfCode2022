@@ -96,6 +96,60 @@ public class RouteFinder
         return nextSet.ToArray();
     }
 
+    private Point2D[] FindReverseNeighboursInSet(Point2D[] currentSet, int stepsFromStart)
+    {
+        List<Point2D> nextSet = new();
+        foreach (var point in currentSet)
+        {
+            int currentHeight = GetHeightOfPoint(point);
+            Point2D nextPoint;
+            // check right
+            if (point.X < HeightMap[0].Length - 1)
+            {
+                nextPoint = new Point2D(point.X + 1, point.Y);
+                if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !PathedPoints.ContainsKey(nextPoint))
+                {
+                    PathedPoints.Add(nextPoint, stepsFromStart);
+                    nextSet.Add(nextPoint);
+                }
+            }
+
+            // check down
+            if (point.Y < HeightMap.Length - 1)
+            {
+                nextPoint = new Point2D(point.X, point.Y + 1);
+                if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !PathedPoints.ContainsKey(nextPoint))
+                {
+                    PathedPoints.Add(nextPoint, stepsFromStart);
+                    nextSet.Add(nextPoint);
+                }
+            }
+
+            // check left
+            if (point.X > 0)
+            {
+                nextPoint = new Point2D(point.X - 1, point.Y);
+                if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !PathedPoints.ContainsKey(nextPoint))
+                {
+                    PathedPoints.Add(nextPoint, stepsFromStart);
+                    nextSet.Add(nextPoint);
+                }
+            }
+
+            // check up
+            if (point.Y > 0)
+            {
+                nextPoint = new Point2D(point.X, point.Y - 1);
+                if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !PathedPoints.ContainsKey(nextPoint))
+                {
+                    PathedPoints.Add(nextPoint, stepsFromStart);
+                    nextSet.Add(nextPoint);
+                }
+            }
+        }
+        return nextSet.ToArray();
+    }
+
     public int GetFewestStepsBetweenPoints(Point2D startPoint, Point2D endPoint)
     {
         // reset path
@@ -138,15 +192,30 @@ public class RouteFinder
 
     public int GetFewestNumberOfStepsToFinishFromHeight(char height)
     {
-        Point2D[] startPoints = GetStartPoints(height);
+        // reset path
+        PathedPoints = new Dictionary<Point2D, int>();
+
         Point2D endPoint = FindEndPoint();
-        int fewestOverallSteps = int.MaxValue;
-        foreach (var startPoint in startPoints)
+
+        int stepsFromEnd = 0;
+        PathedPoints.Add(endPoint, stepsFromEnd);
+
+        Point2D[] currentSet = { endPoint };
+        while (currentSet.Length != 0)
         {
-            int fewestSteps = GetFewestStepsBetweenPoints(startPoint, endPoint);
-            if (fewestSteps < fewestOverallSteps) fewestOverallSteps = fewestSteps;
+            stepsFromEnd++;
+            currentSet = FindReverseNeighboursInSet(currentSet, stepsFromEnd);
         }
 
+        int fewestOverallSteps = int.MaxValue;
+        foreach (var kvPair in PathedPoints)
+        {
+            if (HeightMap[kvPair.Key.Y][kvPair.Key.X] == height)
+            {
+                int fewestSteps = kvPair.Value;
+                if (fewestSteps < fewestOverallSteps) fewestOverallSteps = fewestSteps;
+            }
+        }
         return fewestOverallSteps;
     }
 }
