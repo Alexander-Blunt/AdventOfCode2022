@@ -36,7 +36,7 @@ public class RouteFinderTests
     public void GetNumberOfStepsFromSToF_ReturnsCorrectNumberOfSteps()
     {
         int expected = 31;
-        int actual = _sut.GetNumberOfStepsFromSToF();
+        int actual = _sut.GetNumberOfStepsFromSToE();
 
         Assert.That(actual, Is.EqualTo(expected));
     }

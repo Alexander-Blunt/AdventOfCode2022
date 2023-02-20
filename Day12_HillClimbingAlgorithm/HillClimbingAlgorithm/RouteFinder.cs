@@ -96,58 +96,74 @@ public class RouteFinder
         return nextSet.ToArray();
     }
 
-    private Point2D[] FindReverseNeighboursInSet(Point2D[] currentSet, int stepsFromStart)
+    /// Returns a Dictionary<Point2D, int> of all points connected to the end point and their shortest distance from
+    /// the end.
+    private Dictionary<Point2D, int> GetAllPointsConnectedToEndPoint(Point2D endPoint)
     {
-        List<Point2D> nextSet = new();
-        foreach (var point in currentSet)
+        // Dictionary to hold output
+        var connectedPoints = new Dictionary<Point2D, int>();
+
+        int stepsFromEnd = 0;
+        connectedPoints.Add(endPoint, stepsFromEnd);
+
+        // List of points whose neighbours need checking
+        var currentSet = new List<Point2D> { endPoint };
+
+        while (currentSet.Count != 0)
         {
-            int currentHeight = GetHeightOfPoint(point);
-            Point2D nextPoint;
-            // check right
-            if (point.X < HeightMap[0].Length - 1)
+            List<Point2D> nextSet = new();
+            stepsFromEnd++;
+            foreach (var point in currentSet)
             {
-                nextPoint = new Point2D(point.X + 1, point.Y);
-                if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !PathedPoints.ContainsKey(nextPoint))
+                int currentHeight = GetHeightOfPoint(point);
+                Point2D nextPoint;
+                // check right
+                if (point.X < HeightMap[0].Length - 1)
                 {
-                    PathedPoints.Add(nextPoint, stepsFromStart);
-                    nextSet.Add(nextPoint);
+                    nextPoint = new Point2D(point.X + 1, point.Y);
+                    if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !connectedPoints.ContainsKey(nextPoint))
+                    {
+                        connectedPoints.Add(nextPoint, stepsFromEnd);
+                        nextSet.Add(nextPoint);
+                    }
                 }
-            }
 
-            // check down
-            if (point.Y < HeightMap.Length - 1)
-            {
-                nextPoint = new Point2D(point.X, point.Y + 1);
-                if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !PathedPoints.ContainsKey(nextPoint))
+                // check down
+                if (point.Y < HeightMap.Length - 1)
                 {
-                    PathedPoints.Add(nextPoint, stepsFromStart);
-                    nextSet.Add(nextPoint);
+                    nextPoint = new Point2D(point.X, point.Y + 1);
+                    if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !connectedPoints.ContainsKey(nextPoint))
+                    {
+                        connectedPoints.Add(nextPoint, stepsFromEnd);
+                        nextSet.Add(nextPoint);
+                    }
                 }
-            }
 
-            // check left
-            if (point.X > 0)
-            {
-                nextPoint = new Point2D(point.X - 1, point.Y);
-                if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !PathedPoints.ContainsKey(nextPoint))
+                // check left
+                if (point.X > 0)
                 {
-                    PathedPoints.Add(nextPoint, stepsFromStart);
-                    nextSet.Add(nextPoint);
+                    nextPoint = new Point2D(point.X - 1, point.Y);
+                    if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !connectedPoints.ContainsKey(nextPoint))
+                    {
+                        connectedPoints.Add(nextPoint, stepsFromEnd);
+                        nextSet.Add(nextPoint);
+                    }
                 }
-            }
 
-            // check up
-            if (point.Y > 0)
-            {
-                nextPoint = new Point2D(point.X, point.Y - 1);
-                if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !PathedPoints.ContainsKey(nextPoint))
+                // check up
+                if (point.Y > 0)
                 {
-                    PathedPoints.Add(nextPoint, stepsFromStart);
-                    nextSet.Add(nextPoint);
+                    nextPoint = new Point2D(point.X, point.Y - 1);
+                    if (currentHeight - GetHeightOfPoint(nextPoint) < 2 && !connectedPoints.ContainsKey(nextPoint))
+                    {
+                        connectedPoints.Add(nextPoint, stepsFromEnd);
+                        nextSet.Add(nextPoint);
+                    }
                 }
             }
+            currentSet = nextSet;
         }
-        return nextSet.ToArray();
+        return connectedPoints;
     }
 
     public int GetFewestStepsBetweenPoints(Point2D startPoint, Point2D endPoint)
@@ -168,7 +184,7 @@ public class RouteFinder
         return stepsFromStart;
     }
 
-    public int GetNumberOfStepsFromSToF()
+    public int GetNumberOfStepsFromSToE()
     {
         Point2D startPoint = FindStartPoint();
         Point2D endPoint = FindEndPoint();
@@ -176,39 +192,14 @@ public class RouteFinder
         return GetFewestStepsBetweenPoints(startPoint, endPoint);
     }
 
-    private Point2D[] GetStartPoints(char height)
-    {
-        var startPoints = new List<Point2D>();
-        for (int i = 0; i < HeightMap[0].Length; i++)
-        {
-            for (int j = 0; j < HeightMap.Length; j++)
-            {
-                if (HeightMap[j][i] == height) startPoints.Add(new Point2D(i, j));
-            }
-        }
-        if (startPoints.Count == 0) throw new ArgumentException($"No points of height {height} found");
-        return startPoints.ToArray();
-    }
-
     public int GetFewestNumberOfStepsToFinishFromHeight(char height)
     {
-        // reset path
-        PathedPoints = new Dictionary<Point2D, int>();
-
         Point2D endPoint = FindEndPoint();
 
-        int stepsFromEnd = 0;
-        PathedPoints.Add(endPoint, stepsFromEnd);
-
-        Point2D[] currentSet = { endPoint };
-        while (currentSet.Length != 0)
-        {
-            stepsFromEnd++;
-            currentSet = FindReverseNeighboursInSet(currentSet, stepsFromEnd);
-        }
+        Dictionary<Point2D, int> connectedPoints = GetAllPointsConnectedToEndPoint(endPoint);
 
         int fewestOverallSteps = int.MaxValue;
-        foreach (var kvPair in PathedPoints)
+        foreach (var kvPair in connectedPoints)
         {
             if (HeightMap[kvPair.Key.Y][kvPair.Key.X] == height)
             {

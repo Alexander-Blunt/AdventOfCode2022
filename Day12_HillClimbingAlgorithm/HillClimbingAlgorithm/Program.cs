@@ -11,7 +11,7 @@ internal class Program
         
         // Part 1
         RouteFinder routeFinder = new(startMap);
-        int shortestSteps = routeFinder.GetNumberOfStepsFromSToF();
+        int shortestSteps = routeFinder.GetNumberOfStepsFromSToE();
         Console.WriteLine(shortestSteps);
 
         // Part 2
