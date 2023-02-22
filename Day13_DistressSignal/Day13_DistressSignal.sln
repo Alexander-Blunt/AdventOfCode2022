@@ -5,6 +5,10 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistressSignalApp", "DistressSignalApp\DistressSignalApp.csproj", "{00CB54AC-B4A4-4483-BFCA-90F9DE3A88EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistressSignalTests", "DistressSignalTests\DistressSignalTests.csproj", "{EE19A38D-7686-4FF2-A2B7-87C440EF1149}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOCSharedMethods", "..\AOCSharedMethods\AOCSharedMethods.csproj", "{1942A5C4-2EAA-41CE-93A3-FA6638F29333}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{00CB54AC-B4A4-4483-BFCA-90F9DE3A88EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00CB54AC-B4A4-4483-BFCA-90F9DE3A88EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00CB54AC-B4A4-4483-BFCA-90F9DE3A88EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE19A38D-7686-4FF2-A2B7-87C440EF1149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE19A38D-7686-4FF2-A2B7-87C440EF1149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE19A38D-7686-4FF2-A2B7-87C440EF1149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE19A38D-7686-4FF2-A2B7-87C440EF1149}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1942A5C4-2EAA-41CE-93A3-FA6638F29333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1942A5C4-2EAA-41CE-93A3-FA6638F29333}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1942A5C4-2EAA-41CE-93A3-FA6638F29333}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1942A5C4-2EAA-41CE-93A3-FA6638F29333}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
